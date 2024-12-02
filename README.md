@@ -6,6 +6,33 @@
 <p align="center">
   A powerful and versatile Telegram bot designed for filtering, automation, and much more!
 </p>
+<div align="center">
+  <a href="https://github.com/mn-bots/ShobanaFilterBot/stargazers">
+    <img src="https://img.shields.io/github/stars/mn-bots/ShobanaFilterBot?color=black&logo=github&logoColor=black&style=for-the-badge" alt="Stars" />
+  </a>
+  <a href="https://github.com/mn-bots/ShobanaFilterBot/network/members">
+    <img src="https://img.shields.io/github/forks/mn-bots/ShobanaFilterBot?color=black&logo=github&logoColor=black&style=for-the-badge" alt="Forks" />
+  </a>
+  <a href="https://github.com/mn-bots/ShobanaFilterBot">
+    <img src="https://img.shields.io/github/repo-size/mn-bots/ShobanaFilterBot?color=skyblue&logo=github&logoColor=blue&style=for-the-badge" alt="Repo Size" />
+  </a>
+  <a href="https://github.com/mn-bots/ShobanaFilterBot/commits/main">
+    <img src="https://img.shields.io/github/last-commit/mn-bots/ShobanaFilterBot?color=black&logo=github&logoColor=black&style=for-the-badge" alt="Last Commit" />
+  </a>
+  <a href="https://github.com/mn-bots/ShobanaFilterBot">
+    <img src="https://img.shields.io/github/contributors/mn-bots/ShobanaFilterBot?color=skyblue&logo=github&logoColor=blue&style=for-the-badge" alt="Contributors" />
+  </a>
+  <a href="https://github.com/mn-bots/ShobanaFilterBot/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/License-GPL%202.0%20license-blueviolet?style=for-the-badge" alt="License" />
+  </a>
+  <a href="https://www.python.org/">
+    <img src="https://img.shields.io/badge/Written%20in-Python-skyblue?style=for-the-badge&logo=python" alt="Python" />
+  </a>
+  <a href="https://pypi.org/project/Pyrogram/">
+    <img src="https://img.shields.io/pypi/v/pyrogram?color=white&label=pyrogram&logo=python&logoColor=blue&style=for-the-badge" alt="Pyrogram" />
+  </a>
+</div>
+
 
 ---
 
