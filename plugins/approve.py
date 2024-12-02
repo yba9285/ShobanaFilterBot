@@ -45,7 +45,8 @@ async def accept_request(client, r):
             [InlineKeyboardButton('🎉 Add Me To Your Groups 🎉', url=f'http://t.me/{CONFIG["bot_username"]}?startgroup=true')],
             [
                 InlineKeyboardButton('OTT Updates', url=CONFIG["ott_updates_channel_url"]),
-                InlineKeyboardButton('Main Channel', url=CONFIG["main_channel_url"])
+                InlineKeyboardButton('Main Channel', url=CONFIG["main_channel_url"]),
+            InlineKeyboardButton('ʀᴇᴘᴏ', url='https://github.com/mn-bots/ShobanaFilterBot')
             ]
         ])
 
