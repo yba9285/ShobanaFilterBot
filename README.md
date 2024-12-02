@@ -64,8 +64,9 @@
 </details>
 
 ### Deploy to VPS
-<details><summary>Click to Expand</summary>
-<p>
+<details>
+  <summary>Click to Expand</summary>
+  <p>
 
 ```bash
 git clone https://github.com/mn-bots/ShobanaFilterBot
@@ -73,42 +74,11 @@ git clone https://github.com/mn-bots/ShobanaFilterBot
 pip3 install -U -r requirements.txt
 # Configure variables in info.py and start the bot
 python3 bot.py
-</p> </details>
-<hr>
+</p> </details> <hr>
 
-<h2>💬 Support</h2>
-<p>
-  <a href="https://telegram.dog/mnbots_support" target="_blank">
-    <img src="https://img.shields.io/badge/Telegram-Group-30302f?style=flat&logo=telegram" alt="Telegram Group">
-  </a>
-  <a href="https://telegram.dog/mrmntg" target="_blank">
-    <img src="https://img.shields.io/badge/Telegram-Channel-30302f?style=flat&logo=telegram" alt="Telegram Channel">
-  </a>
-</p>
-
-<hr>
-
-<h2>🙏 Credits</h2>
-<ul>
-  <li><a href="https://github.com/pyrogram/pyrogram" target="_blank">Dan</a> for the Pyrogram Library</li>
-  <li><a href="https://github.com/Mahesh0253/Media-Search-bot" target="_blank">Mahesh</a> for the Media Search Bot</li>
-  <li><a href="https://github.com/EvamariaTG/EvaMaria" target="_blank">EvamariaTG</a> for the EvaMaria Bot</li>
-  <li><a href="https://github.com/trojanzhex/Unlimited-Filter-Bot" target="_blank">Trojanz</a> for Unlimited Filter Bot</li>
-  <li>Goutham for spell check, ping, and restart features</li>
-  <li>MN-TG for editing and modifying this repository</li>
-</ul>
-
-<hr>
-
-<h2>📜 Disclaimer</h2>
-<p>
-  <a href="https://www.gnu.org/licenses/agpl-3.0.en.html" target="_blank">
-    <img src="https://www.gnu.org/graphics/agplv3-155x51.png" alt="GNU AGPLv3">
-  </a>
-</p>
-<p>
-  This project is licensed under the <a href="https://github.com/mn-bots/ShobanaFilterBot/blob/main/LICENSE" target="_blank">GNU AGPL 3.0</a>.
-  <strong>Selling this code for monetary gain is strictly prohibited.</strong>
-</p>
-
-<hr>
+💬 Support
+<p> <a href="https://telegram.dog/mnbots_support" target="_blank"> <img src="https://img.shields.io/badge/Telegram-Group-30302f?style=flat&logo=telegram" alt="Telegram Group"> </a> <a href="https://telegram.dog/mrmntg" target="_blank"> <img src="https://img.shields.io/badge/Telegram-Channel-30302f?style=flat&logo=telegram" alt="Telegram Channel"> </a> </p> <hr>
+🙏 Credits
+<ul> <li><a href="https://github.com/pyrogram/pyrogram" target="_blank">Dan</a> for the Pyrogram Library</li> <li><a href="https://github.com/Mahesh0253/Media-Search-bot" target="_blank">Mahesh</a> for the Media Search Bot</li> <li><a href="https://github.com/EvamariaTG/EvaMaria" target="_blank">EvamariaTG</a> for the EvaMaria Bot</li> <li><a href="https://github.com/trojanzhex/Unlimited-Filter-Bot" target="_blank">Trojanz</a> for Unlimited Filter Bot</li> <li>Goutham for spell check, ping, and restart features</li> <li>MN-TG for editing and modifying this repository</li> </ul> <hr>
+📜 Disclaimer
+<p> <a href="https://www.gnu.org/licenses/agpl-3.0.en.html" target="_blank"> <img src="https://www.gnu.org/graphics/agplv3-155x51.png" alt="GNU AGPLv3"> </a> </p> <p> This project is licensed under the <a href="https://github.com/mn-bots/ShobanaFilterBot/blob/main/LICENSE" target="_blank">GNU AGPL 3.0</a>. <strong>Selling this code for monetary gain is strictly prohibited.</strong> </p> <hr> ```
