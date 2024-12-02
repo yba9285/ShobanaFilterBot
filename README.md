@@ -68,12 +68,12 @@
   <summary>Click to Expand</summary>
   <p>
 
-```bash
+<pre>bash
 git clone https://github.com/mn-bots/ShobanaFilterBot
 # Install dependencies
 pip3 install -U -r requirements.txt
 # Configure variables in info.py and start the bot
-python3 bot.py```
+python3 bot.py</pre>
 </p> </details> <hr>
 
 💬 Support
