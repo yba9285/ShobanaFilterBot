@@ -13,7 +13,7 @@ Currently using free server so please Dont kill Me...
 ◎ Bᴏᴛ Sᴇʀᴠᴇʀ: KoYeb</b>"""
     SOURCE_TXT = """<b>NOTE:</b>
 - Shobana Filter Bot  is a open source project. 
-- Source - <ahref=https://github.com/mntg4u/ShobanaFilterBot>Click Here to get source code</a>
+- Source - <ahref=https://github.com/mn-bots/ShobanaFilterBot>Click Here to get source code</a>
 
 <b>DEVS:</b>
 -<a href=https://github.com/mntg4u> MN - TG</a>"""
@@ -39,7 +39,7 @@ Currently using free server so please Dont kill Me...
 3. Buttons should be properly parsed as markdown format
 
 <b>URL buttons:</b>
-<code>[Button Text](buttonurl:https://github.com/mntg4u/ShobanaFilterBot)</code>
+<code>[Button Text](buttonurl:https://github.com/mn-bots/ShobanaFilterBot)</code>
 
 <b>Alert buttons:</b>
 <code>[Button Text](buttonalert:This is an alert message)</code>"""
@@ -112,11 +112,13 @@ Group = {}(<code>{}</code>)
 Total Members = <code>{}</code>
 Added By - {}
 """
-    RESULT_TXT="""<blockquote> Hey, <br>      My Name Is Shobana<br> Jᴜsᴛ Sᴇᴇ Wʜᴀᴛ I Found Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {} </blockquote>"""
+    RESULT_TXT="""<blockquote> Hey,     </blockquote>
+<pre> My Name Is Shobana </pre>
+<blockquote>Jᴜsᴛ Sᴇᴇ Wʜᴀᴛ I Found Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {} </blockquote>"""
 
-    CUSTOM_FILE_CAPTION = """<b>📂Fɪʟᴇɴᴀᴍᴇ : {file_name}
+    CUSTOM_FILE_CAPTION = """<pre>📂Fɪʟᴇɴᴀᴍᴇ : {file_name}
 FɪʟᴇSɪᴢᴇ : {file_size}
-</b>"""
+</pre>"""
 
     
     RESTART_GC_TXT = """
