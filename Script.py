@@ -70,17 +70,16 @@ Currently using free server so please Dont kill Me...
     EXTRAMOD_TXT = """Help: <b>Extra Modules</b>
 
 <b>NOTE:</b>
-these are the extra features of Eva Maria
+these are the extra features of ShobanaFilterBot
 
 <b>Commands and Usage:</b>
 • /id - <code>get id of a specified user.</code>
 • /info  - <code>get information about a user.</code>
 • /imdb  - <code>get the film information from IMDb source.</code>
 • /search  - <code>get the film information from various sources.</code>
-• /start - <code>Check I'm Alive..</code>
+• /start - <code>Check I'm Alive.</code>
 • /ping - <code>check ping.</code>
 • /usage - <code>usage of bot.</code>
-• /status - <code>Bot Status.</code>
 • /info - <code>User info .</code>
 • /id - <code>User id  .</code>
 • /broadcast - <code>Broadcast (owner only).</code>
