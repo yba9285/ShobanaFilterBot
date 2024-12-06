@@ -30,12 +30,11 @@ async def answer(bot, query):
                            switch_pm_parameter="hehe")
         return
 
-    invite_links = await is_subscribed(bot, query=query)
-    if AUTH_CHANNEL and len(invite_links) >= 1:
+    if AUTH_CHANNEL and not await is_subscribed(bot, query):
         await query.answer(results=[],
-            cache_time=0,
-            switch_pm_text='You have to subscribe my channel to use the bot',
-            switch_pm_parameter="subscribe")
+                           cache_time=0,
+                           switch_pm_text='You have to subscribe my channel to use the bot',
+                           switch_pm_parameter="subscribe")
         return
 
     results = []
@@ -108,7 +107,6 @@ def get_reply_markup(query):
         ]
         ]
     return InlineKeyboardMarkup(buttons)
-
 
 
 
