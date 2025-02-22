@@ -112,8 +112,7 @@ Total Members = <code>{}</code>
 Added By - {}
 """
     RESULT_TXT="""<blockquote> Hey,     </blockquote>
-<pre> My Name Is Shobana </pre>
-<blockquote>Jᴜsᴛ Sᴇᴇ Wʜᴀᴛ I Found Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {} </blockquote>"""
+<blockquote>Jᴜsᴛ Sᴇᴇ Wʜᴀᴛ I Found Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ </blockquote>"""
 
     CUSTOM_FILE_CAPTION = """<pre>📂Fɪʟᴇɴᴀᴍᴇ : {file_name}
 FɪʟᴇSɪᴢᴇ : {file_size}
@@ -132,9 +131,16 @@ FɪʟᴇSɪᴢᴇ : {file_size}
 ID - <code>{}</code>
 Name - {}
 """
-    SPOLL_NOT_FND="""<blockquote> Hi Sir</blockquote>
+    SPOLL_NOT_FND="""
 I couldn't find anything related to your request. 
-Try reading the instruction below 👇🏼
+Try reading the instruction below 
+<blockquote>
+1️ Ask in Correct Spelling
+2️ Don't ask Movies which are not Realased on OTT PLATFORMS
+3️ Possible  ASK [movie name langauge] like this or [movie year] </blockquote>
+OR
+<b> Tʜɪs Mᴏᴠɪᴇ Is Nᴏᴛ Aᴅᴅᴇᴅ Tᴏ DB</b>
+<pre>Report To ADMIN BY USING /bugs command </pre> 
     """
 #SPELL CHECK LANGUAGES TO KNOW callback
     ENG_SPELL="""Please Note Below📓
