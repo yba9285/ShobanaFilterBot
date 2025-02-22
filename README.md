@@ -56,7 +56,8 @@
 - ✅ Font Styling (`/font`)  
 - ✅ User Promotion/Demotion  
 - ✅ Pin/Unpin Messages  
-- ✅ Image-to-Link Conversion  
+- ✅ Image-to-Link Conversion
+- ✅ Auto Delete 
 
 ---
 
