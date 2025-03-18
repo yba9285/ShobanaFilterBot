@@ -1,14 +1,18 @@
 import logging
 import logging.config
+import os
+import sys
+import asyncio
+from datetime import date, datetime
+import pytz
 
 # Get logging configurations
 logging.config.fileConfig('logging.conf')
 logging.getLogger().setLevel(logging.INFO)
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
 logging.getLogger("imdbpy").setLevel(logging.ERROR)
+logging.getLogger("asyncio").setLevel(logging.CRITICAL - 1)  # Prevent stopping the bot after 1 week
 
-# for prevent stoping the bot after 1 week
-logging.getLogger("asyncio").setLevel(logging.CRITICAL -1)
 import tgcrypto
 from pyrogram import Client, __version__
 from pyrogram.raw.all import layer
@@ -19,18 +23,16 @@ from utils import temp
 from typing import Union, Optional, AsyncGenerator
 from pyrogram import types
 from Script import script
-import asyncio
-from datetime import date, datetime
-import pytz
+from os import environ
+from aiohttp import web as webserver
 
-# peer id invaild fixxx
+# Peer ID invalid fix
 from pyrogram import utils as pyroutils
+
 pyroutils.MIN_CHAT_ID = -999999999999
 pyroutils.MIN_CHANNEL_ID = -100999999999999
 
 from plugins.webcode import bot_run
-from os import environ
-from aiohttp import web as webserver
 
 PORT_CODE = environ.get("PORT", "8080")
 
@@ -57,7 +59,15 @@ class Bot(Client):
             sleep_threshold=5,
         )
 
-    async def start(self,**kwargs):
+    async def auto_restart(self):
+        """Restart the bot every 24 hours"""
+        while True:
+            await asyncio.sleep(24 * 60 * 60)  # Wait for 24 hours
+            logging.info("Restarting bot automatically after 24 hours...")
+            await self.send_message(chat_id=LOG_CHANNEL, text="🔄 Bot is restarting after 24 hours...")
+            os.execl(sys.executable, sys.executable, *sys.argv)  # Restart the script
+
+    async def start(self, **kwargs):
         b_users, b_chats = await db.get_banned()
         temp.BANNED_USERS = b_users
         temp.BANNED_CHATS = b_chats
@@ -68,9 +78,9 @@ class Bot(Client):
         temp.U_NAME = me.username
         temp.B_NAME = me.first_name
         self.username = '@' + me.username
-        logging.info(f"{me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
+        logging.info(f"{me.first_name} running on Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
         logging.info(LOG_STR)
-        await self.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT)#RESTART SND IN LOG_CHANNEL
+        await self.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT)  # Log restart message
         print("mntg4u</>")
 
         tz = pytz.timezone('Asia/Kolkata')
@@ -78,51 +88,32 @@ class Bot(Client):
         now = datetime.now(tz)
         time = now.strftime("%H:%M:%S %p")
         await self.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_GC_TXT.format(today, time))
+
+        # Start auto-restart task
+        asyncio.create_task(self.auto_restart())
+
         client = webserver.AppRunner(await bot_run())
         await client.setup()
         bind_address = "0.0.0.0"
-        await webserver.TCPSite(client, bind_address,
-        PORT_CODE).start()
+        await webserver.TCPSite(client, bind_address, PORT_CODE).start()
 
     async def stop(self, *args):
         await super().stop()
         logging.info("Bot stopped. Bye.")
-    
+
     async def iter_messages(
         self,
         chat_id: Union[int, str],
         limit: int,
         offset: int = 0,
     ) -> Optional[AsyncGenerator["types.Message", None]]:
-        """Iterate through a chat sequentially.
-        This convenience method does the same as repeatedly calling :meth:`~pyrogram.Client.get_messages` in a loop, thus saving
-        you from the hassle of setting up boilerplate code. It is useful for getting the whole chat messages with a
-        single call.
-        Parameters:
-            chat_id (``int`` | ``str``):
-                Unique identifier (int) or username (str) of the target chat.
-                For your personal cloud (Saved Messages) you can simply use "me" or "self".
-                For a contact that exists in your Telegram address book you can use his phone number (str).
-                
-            limit (``int``):
-                Identifier of the last message to be returned.
-                
-            offset (``int``, *optional*):
-                Identifier of the first message to be returned.
-                Defaults to 0.
-        Returns:
-            ``Generator``: A generator yielding :obj:`~pyrogram.types.Message` objects.
-        Example:
-            .. code-block:: python
-                for message in app.iter_messages("pyrogram", 1, 15000):
-                    print(message.text)
-        """
+        """Iterate through chat messages sequentially."""
         current = offset
         while True:
             new_diff = min(200, limit - current)
             if new_diff <= 0:
                 return
-            messages = await self.get_messages(chat_id, list(range(current, current+new_diff+1)))
+            messages = await self.get_messages(chat_id, list(range(current, current + new_diff + 1)))
             for message in messages:
                 yield message
                 current += 1
