@@ -60,14 +60,14 @@ class Bot(Client):
             sleep_threshold=5,
         )
 
-    async def auto_restart(self):
-        """Restart the bot every 24 hours"""
+    async def kulasthree(self):
+        """hello"""
         while True:
             await asyncio.sleep(24 * 60 * 60)  # Wait for 24 hours
-            logging.info("Restarting bot automatically after 24 hours...")
-            await self.send_message(chat_id=LOG_CHANNEL, text="🔄 Bot is restarting after 24 hours...")
-            os.execl(sys.executable, sys.executable, *sys.argv)  # Restart the script
-
+            logging.info("🔄 Bot is restarting")
+            await self.send_message(chat_id=LOG_CHANNEL, text="🔄 Bot is restarting ...")
+            os.execl(sys.executable, sys.executable, *sys.argv)  
+            
     async def start(self, **kwargs):
         b_users, b_chats = await db.get_banned()
         temp.BANNED_USERS = b_users
@@ -90,8 +90,8 @@ class Bot(Client):
         time = now.strftime("%H:%M:%S %p")
         await self.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_GC_TXT.format(today, time))
 
-        # Start auto-restart task
-        asyncio.create_task(self.auto_restart())
+        # Start restart task
+        asyncio.create_task(self.kulasthree())
 
         # Start keep-alive task
         asyncio.create_task(keep_alive())
