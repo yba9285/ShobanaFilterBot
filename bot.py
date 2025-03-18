@@ -34,9 +34,15 @@ from aiohttp import web as webserver
 
 PORT_CODE = environ.get("PORT", "8080")
 
+import aiohttp 
+import asyncio
 
-
-
+async def ck_request():
+    async with aiohttp.ClientSession() as session:
+        while True:
+            await session.get("url")
+            await asyncio.sleep(111)
+            
 
 class Bot(Client):
 
