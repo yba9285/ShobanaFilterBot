@@ -5,6 +5,7 @@ import sys
 import asyncio
 from datetime import date, datetime
 import pytz
+import aiohttp
 
 # Get logging configurations
 logging.config.fileConfig('logging.conf')
@@ -18,7 +19,7 @@ from pyrogram import Client, __version__
 from pyrogram.raw.all import layer
 from database.ia_filterdb import Media
 from database.users_chats_db import db
-from info import SESSION, API_ID, API_HASH, BOT_TOKEN, LOG_STR, LOG_CHANNEL
+from info import SESSION, API_ID, API_HASH, BOT_TOKEN, LOG_STR, LOG_CHANNEL, KEEP_ALIVE_URL
 from utils import temp
 from typing import Union, Optional, AsyncGenerator
 from pyrogram import types
@@ -28,7 +29,6 @@ from aiohttp import web as webserver
 
 # Peer ID invalid fix
 from pyrogram import utils as pyroutils
-
 pyroutils.MIN_CHAT_ID = -999999999999
 pyroutils.MIN_CHANNEL_ID = -100999999999999
 
@@ -36,15 +36,16 @@ from plugins.webcode import bot_run
 
 PORT_CODE = environ.get("PORT", "8080")
 
-import aiohttp 
-import asyncio
-
-async def ck_request():
+async def keep_alive():
+    """Send a request every 111 seconds to keep the bot alive (if required)."""
     async with aiohttp.ClientSession() as session:
         while True:
-            await session.get("url")
+            try:
+                await session.get(KEEP_ALIVE_URL)  # Uses the imported URL from info.py
+                logging.info("Sent keep-alive request.")
+            except Exception as e:
+                logging.error(f"Keep-alive request failed: {e}")
             await asyncio.sleep(111)
-            
 
 class Bot(Client):
 
@@ -91,6 +92,9 @@ class Bot(Client):
 
         # Start auto-restart task
         asyncio.create_task(self.auto_restart())
+
+        # Start keep-alive task
+        asyncio.create_task(keep_alive())
 
         client = webserver.AppRunner(await bot_run())
         await client.setup()
