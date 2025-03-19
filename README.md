@@ -58,7 +58,7 @@
 - ✅ Image-to-Link Conversion
 - ✅ Auto Delete
 - ✅ Auto Restart
-- ✅ Added Keep Alive Function (Koyeb Sleep Problem Solved)
+- ✅ Added Keep Alive Function (No need uptimerobot)
 ---
 
 ## 🔧 Variables
