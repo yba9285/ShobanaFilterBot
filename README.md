@@ -48,7 +48,6 @@
 - ✅ Random Pics Generator  
 - ✅ User and Chat Stats  
 - ✅ Ban, Unban, Enable, Disable Commands  
-- ✅ Spelling Check Feature  
 - ✅ File Storage  
 - ✅ Auto-Approval for Requests  
 - ✅ Shortener Link Support (`/short`)  
