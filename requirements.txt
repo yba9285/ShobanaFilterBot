@@ -29,9 +29,8 @@ Pillow>=9.4.0
 psutil>=5.9.0
 pycryptodome
 pygments
-pyrogram>=2.0.30
 pyromod
-pyrotgfork
+
 PyPDF2
 pymongo>=4.0
 python-decouple
