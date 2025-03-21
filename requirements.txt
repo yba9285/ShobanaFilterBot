@@ -1,6 +1,5 @@
 aiofiles
 aiohttp
-pyrofork==2.3.4
 apscheduler
 bs4
 cinemagoer
@@ -57,3 +56,4 @@ youtube-search-python>=1.4.6
 ytthumb
 git+https://github.com/agronholm/anyio
 git+https://github.com/Joelkb/cinemagoer
+git+https://github.com/KurimuzonAkuma/pyrogram
