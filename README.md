@@ -34,33 +34,6 @@
 </div>
 
 
----
-
-## ✨ Features
-
-- ✅ Auto Filter  
-- ✅ Manual Filter  
-- ✅ IMDB Search and Info  
-- ✅ Admin Commands  
-- ✅ Broadcast Messages  
-- ✅ File Indexing  
-- ✅ Inline Search  
-- ✅ Random Pics Generator  
-- ✅ User and Chat Stats  
-- ✅ Ban, Unban, Enable, Disable Commands  
-- ✅ File Storage  
-- ✅ Auto-Approval for Requests  
-- ✅ Shortener Link Support (`/short`)  
-- ✅ Feedback System  
-- ✅ Font Styling (`/font`)  
-- ✅ User Promotion/Demotion  
-- ✅ Pin/Unpin Messages  
-- ✅ Image-to-Link Conversion
-- ✅ Auto Delete
-- ✅ Auto Restart
-- ✅ Added Keep Alive Function (No need uptimerobot & koyeb sleep problem solved)
----
-
 ## 🔧 Variables
 
 ### Required
