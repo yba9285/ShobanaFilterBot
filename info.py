@@ -20,7 +20,7 @@ API_HASH = environ.get('API_HASH', '')
 BOT_TOKEN = environ.get('BOT_TOKEN', '')
 
 # Keep-Alive URL
-KEEP_ALIVE_URL = environ.get("KEEP_ALIVE_URL", "https://your-url.com")  # <-- Add this line
+KEEP_ALIVE_URL = environ.get("KEEP_ALIVE_URL", "https://protective-carmine-musammil2007-a8248229.koyeb.app/")  # <-- Add this line
 
 # Bot settings
 BOT_START_TIME = time()
