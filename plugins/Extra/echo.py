@@ -8,7 +8,7 @@ async def echo(client, message):
         # Check user permissions
         user = await client.get_chat_member(message.chat.id, message.from_user.id)
         if user.status not in [enums.ChatMemberStatus.OWNER, enums.ChatMemberStatus.ADMINISTRATOR]:
-            await message.reply_text("You don't have permission to use this command.")
+            await message.reply_text("You don't have permission to use this command .")
             return
     except Exception as error:
         # Handle case where bot lacks permissions to get member info

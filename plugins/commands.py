@@ -14,75 +14,46 @@ from database.connections_mdb import active_connection
 import re
 import json
 import base64
-
 logger = logging.getLogger(__name__)
-BATCH_FILES = {}
 
-# Helper function for auto-deletion of cached media
-async def auto_delete_media(client, message, media_msg, delay=180):
-    warning = await message.reply_text(
-        "<b><u>❗️ WARNING ❗️</u></b>\n\n"
-        "This Movie File/Video will be automatically deleted in <b><u>{} seconds</u></b>.\n"
-        "<i>(Due to Copyright Issues - Please forward it to your Saved Messages ASAP)</i>"
-        .format(delay)
-    )
-    await asyncio.sleep(delay)
-    await media_msg.delete()
-    await warning.edit_text("<b>Your File/Video has been successfully deleted!</b>")
+BATCH_FILES = {}
 
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
     if message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         buttons = [
-            [
-                InlineKeyboardButton(f'ᴏᴛᴛ ᴜᴘᴅᴀᴛᴇs​', url='https://t.me/new_ott_movies3'),
-                InlineKeyboardButton(f'ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ', url='https://t.me/mn_movies2'),
-                InlineKeyboardButton('ʀᴇᴘᴏ', url='https://github.com/mn-bots/ShobanaFilterBot')
+              [
+                  InlineKeyboardButton(f'ᴏᴛᴛ ᴜᴘᴅᴀᴛᴇs​', url='https://t.me/new_ott_movies3'),
+                  InlineKeyboardButton(f'ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ', url='https://t.me/mn_movies2'),
+                  InlineKeyboardButton('ʀᴇᴘᴏ', url='https://github.com/mn-bots/ShobanaFilterBot')
+         ]
             ]
-        ]
         reply_markup = InlineKeyboardMarkup(buttons)
-        await message.reply(
-            script.START_TXT.format(
-                message.from_user.mention if message.from_user else message.chat.title,
-                temp.U_NAME,
-                temp.B_NAME
-            ),
-            reply_markup=reply_markup
-        )
-        await asyncio.sleep(2)
+        await message.reply(script.START_TXT.format(message.from_user.mention if message.from_user else message.chat.title, temp.U_NAME, temp.B_NAME), reply_markup=reply_markup)
+        await asyncio.sleep(2) # 😢 https://github.com/GouthamSER/KuttuBot/blob/master/plugins/p_ttishow.py#L17 😬 wait a bit, before checking.
         if not await db.get_chat(message.chat.id):
-            total = await client.get_chat_members_count(message.chat.id)
-            await client.send_message(
-                LOG_CHANNEL,
-                script.LOG_TEXT_G.format(message.chat.title, message.chat.id, total, "Unknown")
-            )
+            total=await client.get_chat_members_count(message.chat.id)
+            await client.send_message(LOG_CHANNEL, script.LOG_TEXT_G.format(message.chat.title, message.chat.id, total, "Unknown"))       
             await db.add_chat(message.chat.id, message.chat.title)
-        return
-
+        return 
     if not await db.is_user_exist(message.from_user.id):
         await db.add_user(message.from_user.id, message.from_user.first_name)
-        await client.send_message(
-            LOG_CHANNEL,
-            script.LOG_TEXT_P.format(message.from_user.id, message.from_user.mention)
-        )
+        await client.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(message.from_user.id, message.from_user.mention))
     if len(message.command) != 2:
-        buttons = [
-            [
-                InlineKeyboardButton(' 𝗔𝗱𝗱 𝗠𝗲 𝗧𝗼 𝗬𝗼𝘂𝗿 𝗚𝗿𝗼𝘂𝗽𝘀 ', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
-            ],
-            [
-                InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-                InlineKeyboardButton(' ᴀʙᴏᴜᴛ', callback_data='about')
-            ],
-            [
-                InlineKeyboardButton(f'ᴏᴛᴛ ᴜᴘᴅᴀᴛᴇs​', url='https://t.me/new_ott_movies3'),
-                InlineKeyboardButton(f'ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ', url='https://t.me/mn_movies2'),
-                InlineKeyboardButton('ʀᴇᴘᴏ', url='https://github.com/mn-bots/ShobanaFilterBot')
-            ]
-        ]
+        buttons = [[
+            InlineKeyboardButton('🎉 𝗔𝗱𝗱 𝗠𝗲 𝗧𝗼 𝗬𝗼𝘂𝗿 𝗚𝗿𝗼𝘂𝗽𝘀 🎉', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
+            ],[
+            InlineKeyboardButton('🛠️ ʜᴇʟᴘ', callback_data='help'),
+            InlineKeyboardButton('🛡️ ᴀʙᴏᴜᴛ', callback_data='about')
+        ], [
+             InlineKeyboardButton(f'ᴏᴛᴛ ᴜᴘᴅᴀᴛᴇs​', url='https://t.me/new_ott_movies3'),
+             InlineKeyboardButton(f'ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ', url='https://t.me/mn_movies2'),
+            InlineKeyboardButton('ʀᴇᴘᴏ', url='https://github.com/mn-bots/ShobanaFilterBot')
+         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
-        m = await message.reply_text("ShobanaFilterBot")
-        await asyncio.sleep(1.2)
+        #add emoji loading then run 1 sec and dlt
+        m=await message.reply_text("ShobanaFilterBot") 
+        await asyncio.sleep(1.2)#1.2sec sleep
         await m.delete()
         await message.reply_photo(
             photo=random.choice(PICS),
@@ -91,7 +62,6 @@ async def start(client, message):
             parse_mode=enums.ParseMode.HTML
         )
         return
-
     if AUTH_CHANNEL and not await is_subscribed(client, message):
         try:
             invite_link = await client.create_chat_invite_link(int(AUTH_CHANNEL))
@@ -99,12 +69,17 @@ async def start(client, message):
             logger.error("Make sure Bot is admin in Forcesub channel")
             return
         btn = [
-            [InlineKeyboardButton(" Join Updates Channel", url=invite_link.invite_link)]
+            [
+                InlineKeyboardButton(
+                    "🤖 Join Updates Channel", url=invite_link.invite_link
+                )
+            ]
         ]
+
         if message.command[1] != "subscribe":
             try:
                 kk, file_id = message.command[1].split("_", 1)
-                pre = 'checksubp' if kk == 'filep' else 'checksub'
+                pre = 'checksubp' if kk == 'filep' else 'checksub' 
                 btn.append([InlineKeyboardButton(" Try Again", callback_data=f"{pre}#{file_id}")])
             except (IndexError, ValueError):
                 btn.append([InlineKeyboardButton("  Try Again", url=f"https://t.me/{temp.U_NAME}?start={message.command[1]}")])
@@ -113,24 +88,19 @@ async def start(client, message):
             text="**Please Join My Updates Channel to use this Bot!**",
             reply_markup=InlineKeyboardMarkup(btn),
             parse_mode=enums.ParseMode.MARKDOWN
-        )
+            )
         return
-
     if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
-        buttons = [
-            [
-                InlineKeyboardButton(' 𝗔𝗱𝗱 𝗠𝗲 𝗧𝗼 𝗬𝗼𝘂𝗿 𝗚𝗿𝗼𝘂𝗽𝘀 ', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
-            ],
-            [
-                InlineKeyboardButton(' ʜᴇʟᴘ', callback_data='help'),
-                InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')
-            ],
-            [
-                InlineKeyboardButton(f'ᴏᴛᴛ ᴜᴘᴅᴀᴛᴇs​', url='https://t.me/new_ott_movies3'),
-                InlineKeyboardButton(f'ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ', url='https://t.me/mn_movies2'),
-                InlineKeyboardButton('ʀᴇᴘᴏ', url='https://github.com/mn-bots/ShobanaFilterBot')
-            ]
-        ]
+        buttons = [[
+            InlineKeyboardButton('🎉 𝗔𝗱𝗱 𝗠𝗲 𝗧𝗼 𝗬𝗼𝘂𝗿 𝗚𝗿𝗼𝘂𝗽𝘀 🎉', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
+            ],[
+            InlineKeyboardButton('🛠️ ʜᴇʟᴘ', callback_data='help'),
+            InlineKeyboardButton('🛡️ ᴀʙᴏᴜᴛ', callback_data='about')
+        ],[
+             InlineKeyboardButton(f'ᴏᴛᴛ ᴜᴘᴅᴀᴛᴇs​', url='https://t.me/new_ott_movies3'),
+             InlineKeyboardButton(f'ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ', url='https://t.me/mn_movies2'),
+            InlineKeyboardButton('ʀᴇᴘᴏ', url='https://github.com/mn-bots/ShobanaFilterBot')
+         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_photo(
             photo=random.choice(PICS),
@@ -139,14 +109,13 @@ async def start(client, message):
             parse_mode=enums.ParseMode.HTML
         )
         return
-
+    
     if len(message.command) == 2 and message.command[1].startswith('mntgx'):
-        searches = message.command[1].split("-", 1)[1]
-        search = searches.replace('-', ' ')
-        message.text = search
-        await auto_filter(client, message)
+        searches = message.command[1].split("-", 1)[1] 
+        search = searches.replace('-',' ')
+        message.text = search 
+        await auto_filter(client, message) 
         return
-
     data = message.command[1]
     try:
         pre, file_id = data.split('_', 1)
@@ -159,9 +128,9 @@ async def start(client, message):
         msgs = BATCH_FILES.get(file_id)
         if not msgs:
             file = await client.download_media(file_id)
-            try:
+            try: 
                 with open(file) as file_data:
-                    msgs = json.loads(file_data.read())
+                    msgs=json.loads(file_data.read())
             except:
                 await sts.edit("FAILED")
                 return await client.send_message(LOG_CHANNEL, "UNABLE TO OPEN FILE.")
@@ -169,44 +138,36 @@ async def start(client, message):
             BATCH_FILES[file_id] = msgs
         for msg in msgs:
             title = msg.get("title")
-            size = get_size(int(msg.get("size", 0)))
-            f_caption = msg.get("caption", "")
+            size=get_size(int(msg.get("size", 0)))
+            f_caption=msg.get("caption", "")
             if BATCH_FILE_CAPTION:
                 try:
-                    f_caption = BATCH_FILE_CAPTION.format(
-                        file_name='' if title is None else title,
-                        file_size='' if size is None else size,
-                        file_caption='' if f_caption is None else f_caption
-                    )
+                    f_caption=BATCH_FILE_CAPTION.format(file_name= '' if title is None else title, file_size='' if size is None else size, file_caption='' if f_caption is None else f_caption)
                 except Exception as e:
                     logger.exception(e)
-                    f_caption = f_caption
+                    f_caption=f_caption
             if f_caption is None:
                 f_caption = f"{title}"
             try:
-                m = await client.send_cached_media(
+                await client.send_cached_media(
                     chat_id=message.from_user.id,
                     file_id=msg.get("file_id"),
                     caption=f_caption,
-                    protect_content=msg.get('protect', False)
-                )
-                await auto_delete_media(client, message, m, delay=180)
-                return
+                    protect_content=msg.get('protect', False),
+                    )
             except FloodWait as e:
                 await asyncio.sleep(e.x)
                 logger.warning(f"Floodwait of {e.x} sec.")
-                m = await client.send_cached_media(
+                await client.send_cached_media(
                     chat_id=message.from_user.id,
                     file_id=msg.get("file_id"),
                     caption=f_caption,
-                    protect_content=msg.get('protect', False)
-                )
-                await auto_delete_media(client, message, m, delay=180)
-                return
+                    protect_content=msg.get('protect', False),
+                    )
             except Exception as e:
                 logger.warning(e, exc_info=True)
                 continue
-            await asyncio.sleep(1)
+            await asyncio.sleep(1) 
         await sts.delete()
         return
     elif data.split("-", 1)[0] == "DSTORE":
@@ -224,11 +185,7 @@ async def start(client, message):
                 media = getattr(msg, msg.media.value)
                 if BATCH_FILE_CAPTION:
                     try:
-                        f_caption = BATCH_FILE_CAPTION.format(
-                            file_name=getattr(media, 'file_name', ''),
-                            file_size=getattr(media, 'file_size', ''),
-                            file_caption=getattr(msg, 'caption', '')
-                        )
+                        f_caption=BATCH_FILE_CAPTION.format(file_name=getattr(media, 'file_name', ''), file_size=getattr(media, 'file_size', ''), file_caption=getattr(msg, 'caption', ''))
                     except Exception as e:
                         logger.exception(e)
                         f_caption = getattr(msg, 'caption', '')
@@ -255,48 +212,53 @@ async def start(client, message):
                 except Exception as e:
                     logger.exception(e)
                     continue
-            await asyncio.sleep(1)
+            await asyncio.sleep(1) 
         return await sts.delete()
+        
 
-    files_ = await get_file_details(file_id)
+    files_ = await get_file_details(file_id)           
     if not files_:
         pre, file_id = ((base64.urlsafe_b64decode(data + "=" * (-len(data) % 4))).decode("ascii")).split("_", 1)
         try:
             msg = await client.send_cached_media(
                 chat_id=message.from_user.id,
                 file_id=file_id,
-                protect_content=True if pre == 'filep' else False
-            )
-            await auto_delete_media(client, message, msg, delay=180)
+                protect_content=True if pre == 'filep' else False,
+                )
+            filetype = msg.media
+            file = getattr(msg, filetype.value)
+            title = file.file_name
+            size=get_size(file.file_size)
+            f_caption = f"<code>{title}</code>"
+            if CUSTOM_FILE_CAPTION:
+                try:
+                    f_caption=CUSTOM_FILE_CAPTION.format(file_name= '' if title is None else title, file_size='' if size is None else size, file_caption='')
+                except:
+                    return
+            await msg.edit_caption(f_caption)
             return
         except:
             pass
         return await message.reply('No such file exist.')
     files = files_[0]
     title = files.file_name
-    size = get_size(files.file_size)
-    f_caption = files.caption
+    size=get_size(files.file_size)
+    f_caption=files.caption
     if CUSTOM_FILE_CAPTION:
         try:
-            f_caption = CUSTOM_FILE_CAPTION.format(
-                file_name='' if title is None else title,
-                file_size='' if size is None else size,
-                file_caption='' if f_caption is None else f_caption
-            )
+            f_caption=CUSTOM_FILE_CAPTION.format(file_name= '' if title is None else title, file_size='' if size is None else size, file_caption='' if f_caption is None else f_caption)
         except Exception as e:
             logger.exception(e)
-            f_caption = f_caption
+            f_caption=f_caption
     if f_caption is None:
         f_caption = f"{files.file_name}"
-    m = await client.send_cached_media(
+    await client.send_cached_media(
         chat_id=message.from_user.id,
         file_id=file_id,
         caption=f_caption,
-        protect_content=True if pre == 'filep' else False
-    )
-    await auto_delete_media(client, message, m, delay=180)
-    return
-        
+        protect_content=True if pre == 'filep' else False,
+        )
+                    
 
 @Client.on_message(filters.command('channel') & filters.user(ADMINS))
 async def channel_info(bot, message):

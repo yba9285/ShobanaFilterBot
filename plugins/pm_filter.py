@@ -358,22 +358,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
                 return
             else:
-                m=await client.send_cached_media(
+                await client.send_cached_media(
                     chat_id=query.from_user.id,
                     file_id=file_id,
                     caption=f_caption,
                     protect_content=True if ident == "filep" else False 
                 )
-                k = await message.reply_text(
-                    "<b><u>❗️❗️❗️IMPORTANT❗️️❗️❗️</u></b>\n\n"
-                    "This Movie Files/Videos will be deleted in <b><u>3 mins</u> 🫥</b> "
-                    "<i>(Due to Copyright Issues)</i>.\n\n"
-                    "<b><i>Please forward this ALL Files/Videos to your Saved Messages and Start Download there</i></b>"
-                )
-                await asyncio.sleep(180)
-                await m.delete()
-                await k.edit("<b>Your File/Video is successfully deleted!!!</b>")
-                return
         except UserIsBlocked:
             await query.answer('Unblock the bot mahn !', show_alert=True)
         except PeerIdInvalid:
@@ -403,22 +393,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if f_caption is None:
             f_caption = f"{title}"
         await query.answer()
-        m=await client.send_cached_media(
+        await client.send_cached_media(
             chat_id=query.from_user.id,
             file_id=file_id,
             caption=f_caption,
             protect_content=True if ident == 'checksubp' else False
         )
-                k = await message.reply_text(
-                    "<b><u>❗️❗️❗️IMPORTANT❗️️❗️❗️</u></b>\n\n"
-                    "This Movie Files/Videos will be deleted in <b><u>3 mins</u> 🫥</b> "
-                    "<i>(Due to Copyright Issues)</i>.\n\n"
-                    "<b><i>Please forward this ALL Files/Videos to your Saved Messages and Start Download there</i></b>"
-                )
-                await asyncio.sleep(180)
-                await m.delete()
-                await k.edit("<b>Your File/Video is successfully deleted!!!</b>")
-                return
     elif query.data == "pages":
         await query.answer()
 #ALERT FN IN SPELL CHECK FOR LANGAUGES TO KNOW HOW TO TYPE MOVIES esp english spell check goto adv spell check to check donot change the codes      
