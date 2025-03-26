@@ -21,7 +21,7 @@ async def mongo(client, message):
             await message.reply_text("You don't have permission to use this command.")
             return
     except Exception as error:
-        await message.reply_text(f"An error occurred. I may not have permission to check user status. {error}")
+        await message.reply_text(f"An error occurred: {error}")
         return
 
     args = message.text.split(maxsplit=1)
@@ -39,15 +39,12 @@ async def mongo(client, message):
         mongo_client = MongoClient(mongo_url, serverSelectionTimeoutMS=5000)
         mongo_client.server_info()
     except ConnectionFailure:
-        await message.reply_text("Failed to connect to the MongoDB server. Please check your URL and try again.")
-        return
-    except Exception as e:
-        await message.reply_text(f"An error occurred: {e}")
+        await message.reply_text("Failed to connect to MongoDB. Check your URL.")
         return
 
     db_names = mongo_client.list_database_names()
     if not db_names:
-        await message.reply_text("No databases found on the server.")
+        await message.reply_text("No databases found on this MongoDB server.")
         return
 
     db_name = db_names[0]  # Using the first database
@@ -55,7 +52,7 @@ async def mongo(client, message):
     collections = db.list_collection_names()
 
     if not collections:
-        await message.reply_text(f"No collections found in the database '{db_name}'.")
+        await message.reply_text(f"No collections found in '{db_name}'.")
         return
 
     text = f"Database: {db_name}\nCollections:\n" + "\n".join(f" - {coll}" for coll in collections)
@@ -84,22 +81,19 @@ async def handle_callback_query(client, query: CallbackQuery):
     action = data[0]
     db_name = data[1]
     coll_name = data[2] if len(data) > 2 else None
-    short_id = data[-1]  # Retrieve the short ID
+    short_id = data[-1]  
 
     # Get the full MongoDB URL from stored sessions
     mongo_url = mongo_sessions.get(short_id)
     if not mongo_url:
-        await query.answer("MongoDB session expired. Please use /mongo again.", show_alert=True)
+        await query.answer("MongoDB session expired. Use /mongo again.", show_alert=True)
         return
 
     try:
         mongo_client = MongoClient(mongo_url, serverSelectionTimeoutMS=5000)
         mongo_client.server_info()
     except ConnectionFailure:
-        await query.message.edit_text("Failed to connect to the MongoDB server. Please check the URL and try again.")
-        return
-    except Exception as e:
-        await query.message.edit_text(f"An error occurred: {e}")
+        await query.message.edit_text("Failed to connect to MongoDB.")
         return
 
     db = mongo_client[db_name]
@@ -109,79 +103,84 @@ async def handle_callback_query(client, query: CallbackQuery):
     elif action == "delete" and coll_name:
         await delete_collection(query, db, coll_name)
     elif action == "transfer" and coll_name:
-        await initiate_transfer(query, db_name, coll_name, mongo_url)
+        await initiate_transfer(query, db_name, coll_name, mongo_url, query.from_user.id)
     elif action == "bulk_download":
         await bulk_download_collections(query, db)
     elif action == "bulk_delete":
         await bulk_delete_collections(query, db)
     elif action == "bulk_transfer":
-        await initiate_bulk_transfer(query, db_name, mongo_url)
+        await initiate_bulk_transfer(query, db_name, mongo_url, query.from_user.id)
 
-async def download_collection(query, db, coll_name):
-    collection = db[coll_name]
-    documents = list(collection.find())
-    if not documents:
-        await query.answer(f"The collection '{coll_name}' is empty.", show_alert=True)
-        return
-
-    file_path = f"{coll_name}.json"
-    with open(file_path, "w", encoding="utf-8") as file:
-        json.dump(documents, file, default=str, indent=4)
-
-    await query.message.reply_document(file_path)
-    os.remove(file_path)
-    await query.answer(f"Downloaded collection '{coll_name}'.")
-
-async def delete_collection(query, db, coll_name):
-    collection = db[coll_name]
-    collection.drop()
-    await query.answer(f"Deleted collection '{coll_name}'.")
-    await query.message.edit_text(f"Collection '{coll_name}' has been deleted.")
-
-async def initiate_transfer(query, db_name, coll_name, source_url):
-    user_id = query.from_user.id
+async def initiate_transfer(query, db_name, coll_name, source_url, user_id):
     transfer_requests[user_id] = {
         "source_url": source_url,
         "db_name": db_name,
         "coll_name": coll_name
     }
-    await query.message.reply_text("Please send the target MongoDB URL to transfer the collection.")
+    await query.message.reply_text("Send the **target MongoDB URL** where the collection should be transferred.")
     await query.answer()
 
-async def bulk_download_collections(query, db):
-    collections = db.list_collection_names()
-    all_documents = {}
-
-    for coll in collections:
-        collection = db[coll]
-        documents = list(collection.find())
-        if documents:
-            all_documents[coll] = documents
-
-    if not all_documents:
-        await query.answer("No documents found in any collection.", show_alert=True)
+@Client.on_message(filters.text & filters.private)
+async def handle_target_url(client, message):
+    user_id = message.from_user.id
+    if user_id not in transfer_requests:
         return
 
-    file_path = f"{db.name}_all_collections.json"
-    with open(file_path, "w", encoding="utf-8") as file:
-        json.dump(all_documents, file, default=str, indent=4)
+    target_url = message.text.strip()
+    source_info = transfer_requests.pop(user_id)
 
-    await query.message.reply_document(file_path)
-    os.remove(file_path)
-    await query.answer("Downloaded all collections.")
+    source_client = MongoClient(source_info["source_url"])
+    source_db = source_client[source_info["db_name"]]
+    source_collection = source_db[source_info["coll_name"]]
 
-async def bulk_delete_collections(query, db):
-    collections = db.list_collection_names()
-    for coll in collections:
-        collection = db[coll]
-        collection.drop()
-    await query.answer("Deleted all collections.")
-    await query.message.edit_text("All collections have been deleted.")
+    target_client = MongoClient(target_url)
+    target_db = target_client[source_info["db_name"]]
+    target_collection = target_db[source_info["coll_name"]]
 
-async def initiate_bulk_transfer(query, db_name, source_url):
-    user_id = query.from_user.id
+    # Transfer all documents from source to target
+    documents = list(source_collection.find())
+    if not documents:
+        await message.reply("Source collection is empty. No data to transfer.")
+        return
+
+    target_collection.insert_many(documents)
+    await message.reply(f"✅ Successfully transferred collection **{source_info['coll_name']}** to the new MongoDB database.")
+
+async def bulk_transfer_collections(query, db_name, source_url, user_id):
     transfer_requests[user_id] = {
-        "source_url": source_url
+        "source_url": source_url,
+        "db_name": db_name,
+        "bulk_transfer": True
     }
-    await query.message.reply_text("Please send the target MongoDB URL to transfer all collections.")
+    await query.message.reply_text("Send the **target MongoDB URL** to transfer **all collections** from this database.")
     await query.answer()
+
+@Client.on_message(filters.text & filters.private)
+async def handle_bulk_transfer(client, message):
+    user_id = message.from_user.id
+    if user_id not in transfer_requests:
+        return
+
+    target_url = message.text.strip()
+    source_info = transfer_requests.pop(user_id)
+
+    source_client = MongoClient(source_info["source_url"])
+    source_db = source_client[source_info["db_name"]]
+    target_client = MongoClient(target_url)
+    target_db = target_client[source_info["db_name"]]
+
+    collections = source_db.list_collection_names()
+    if not collections:
+        await message.reply("No collections found to transfer.")
+        return
+
+    for coll in collections:
+        source_collection = source_db[coll]
+        target_collection = target_db[coll]
+
+        documents = list(source_collection.find())
+        if documents:
+            target_collection.insert_many(documents)
+
+    await message.reply(f"✅ All collections from **{source_info['db_name']}** have been transferred successfully.")
+
