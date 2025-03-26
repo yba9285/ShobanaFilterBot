@@ -4,6 +4,10 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 import json
 import os
+import hashlib
+
+# Dictionary to store MongoDB session URLs with unique short IDs
+mongo_sessions = {}
 
 # Dictionary to store transfer requests
 transfer_requests = {}
@@ -26,9 +30,14 @@ async def mongo(client, message):
         return
 
     mongo_url = args[1].strip()
+
+    # Generate a short unique ID for the MongoDB URL
+    short_id = hashlib.md5(mongo_url.encode()).hexdigest()[:8]
+    mongo_sessions[short_id] = mongo_url  # Store URL with short ID
+
     try:
         mongo_client = MongoClient(mongo_url, serverSelectionTimeoutMS=5000)
-        mongo_client.server_info()  # Verify connection
+        mongo_client.server_info()
     except ConnectionFailure:
         await message.reply_text("Failed to connect to the MongoDB server. Please check your URL and try again.")
         return
@@ -41,8 +50,7 @@ async def mongo(client, message):
         await message.reply_text("No databases found on the server.")
         return
 
-    # For demonstration, using the first database
-    db_name = db_names[0]
+    db_name = db_names[0]  # Using the first database
     db = mongo_client[db_name]
     collections = db.list_collection_names()
 
@@ -55,16 +63,16 @@ async def mongo(client, message):
     keyboard = []
     for coll in collections:
         keyboard.append([
-            InlineKeyboardButton("Download", callback_data=f"download|{db_name}|{coll}|{mongo_url}"),
-            InlineKeyboardButton("Delete", callback_data=f"delete|{db_name}|{coll}|{mongo_url}"),
-            InlineKeyboardButton("Transfer", callback_data=f"transfer|{db_name}|{coll}|{mongo_url}")
+            InlineKeyboardButton("Download", callback_data=f"download|{db_name}|{coll}|{short_id}"),
+            InlineKeyboardButton("Delete", callback_data=f"delete|{db_name}|{coll}|{short_id}"),
+            InlineKeyboardButton("Transfer", callback_data=f"transfer|{db_name}|{coll}|{short_id}")
         ])
 
     # Bulk action buttons
     keyboard.append([
-        InlineKeyboardButton("Download All", callback_data=f"bulk_download|{db_name}|{mongo_url}"),
-        InlineKeyboardButton("Delete All", callback_data=f"bulk_delete|{db_name}|{mongo_url}"),
-        InlineKeyboardButton("Transfer All", callback_data=f"bulk_transfer|{db_name}|{mongo_url}")
+        InlineKeyboardButton("Download All", callback_data=f"bulk_download|{db_name}|{short_id}"),
+        InlineKeyboardButton("Delete All", callback_data=f"bulk_delete|{db_name}|{short_id}"),
+        InlineKeyboardButton("Transfer All", callback_data=f"bulk_transfer|{db_name}|{short_id}")
     ])
 
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -75,8 +83,14 @@ async def handle_callback_query(client, query: CallbackQuery):
     data = query.data.split("|")
     action = data[0]
     db_name = data[1]
-    mongo_url = data[2]
-    coll_name = data[3] if len(data) > 3 else None
+    coll_name = data[2] if len(data) > 2 else None
+    short_id = data[-1]  # Retrieve the short ID
+
+    # Get the full MongoDB URL from stored sessions
+    mongo_url = mongo_sessions.get(short_id)
+    if not mongo_url:
+        await query.answer("MongoDB session expired. Please use /mongo again.", show_alert=True)
+        return
 
     try:
         mongo_client = MongoClient(mongo_url, serverSelectionTimeoutMS=5000)
@@ -90,15 +104,12 @@ async def handle_callback_query(client, query: CallbackQuery):
 
     db = mongo_client[db_name]
 
-    if action == "download":
-        if coll_name:
-            await download_collection(query, db, coll_name)
-    elif action == "delete":
-        if coll_name:
-            await delete_collection(query, db, coll_name)
-    elif action == "transfer":
-        if coll_name:
-            await initiate_transfer(query, db_name, coll_name, mongo_url)
+    if action == "download" and coll_name:
+        await download_collection(query, db, coll_name)
+    elif action == "delete" and coll_name:
+        await delete_collection(query, db, coll_name)
+    elif action == "transfer" and coll_name:
+        await initiate_transfer(query, db_name, coll_name, mongo_url)
     elif action == "bulk_download":
         await bulk_download_collections(query, db)
     elif action == "bulk_delete":
