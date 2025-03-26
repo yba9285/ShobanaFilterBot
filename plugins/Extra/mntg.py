@@ -171,5 +171,6 @@ async def initiate_bulk_transfer(query, db_name, source_url):
     user_id = query.from_user.id
     transfer_requests[user_id] = {
         "source_url": source_url
-::contentReference[oaicite:0]{index=0}
- 
+    }
+    await query.message.reply_text("Please send the target MongoDB URL to transfer all collections.")
+    await query.answer()
