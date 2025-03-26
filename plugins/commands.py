@@ -41,10 +41,10 @@ async def start(client, message):
         await client.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(message.from_user.id, message.from_user.mention))
     if len(message.command) != 2:
         buttons = [[
-            InlineKeyboardButton(' 𝗔𝗱𝗱 𝗠𝗲 𝗧𝗼 𝗬𝗼𝘂𝗿 𝗚𝗿𝗼𝘂𝗽𝘀 ', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
+            InlineKeyboardButton('🎉 𝗔𝗱𝗱 𝗠𝗲 𝗧𝗼 𝗬𝗼𝘂𝗿 𝗚𝗿𝗼𝘂𝗽𝘀 🎉', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
             ],[
-            InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-            InlineKeyboardButton(' ᴀʙᴏᴜᴛ', callback_data='about')
+            InlineKeyboardButton('🛠️ ʜᴇʟᴘ', callback_data='help'),
+            InlineKeyboardButton('🛡️ ᴀʙᴏᴜᴛ', callback_data='about')
         ], [
              InlineKeyboardButton(f'ᴏᴛᴛ ᴜᴘᴅᴀᴛᴇs​', url='https://t.me/new_ott_movies3'),
              InlineKeyboardButton(f'ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ', url='https://t.me/mn_movies2'),
@@ -71,7 +71,7 @@ async def start(client, message):
         btn = [
             [
                 InlineKeyboardButton(
-                    " Join Updates Channel", url=invite_link.invite_link
+                    "🤖 Join Updates Channel", url=invite_link.invite_link
                 )
             ]
         ]
@@ -92,10 +92,10 @@ async def start(client, message):
         return
     if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
         buttons = [[
-            InlineKeyboardButton(' 𝗔𝗱𝗱 𝗠𝗲 𝗧𝗼 𝗬𝗼𝘂𝗿 𝗚𝗿𝗼𝘂𝗽𝘀 ', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
+            InlineKeyboardButton('🎉 𝗔𝗱𝗱 𝗠𝗲 𝗧𝗼 𝗬𝗼𝘂𝗿 𝗚𝗿𝗼𝘂𝗽𝘀 🎉', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
             ],[
-            InlineKeyboardButton(' ʜᴇʟᴘ', callback_data='help'),
-            InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')
+            InlineKeyboardButton('🛠️ ʜᴇʟᴘ', callback_data='help'),
+            InlineKeyboardButton('🛡️ ᴀʙᴏᴜᴛ', callback_data='about')
         ],[
              InlineKeyboardButton(f'ᴏᴛᴛ ᴜᴘᴅᴀᴛᴇs​', url='https://t.me/new_ott_movies3'),
              InlineKeyboardButton(f'ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ', url='https://t.me/mn_movies2'),
@@ -149,17 +149,12 @@ async def start(client, message):
             if f_caption is None:
                 f_caption = f"{title}"
             try:
-                m=await client.send_cached_media(
+                await client.send_cached_media(
                     chat_id=message.from_user.id,
                     file_id=msg.get("file_id"),
                     caption=f_caption,
                     protect_content=msg.get('protect', False),
                     )
-                k = await message.reply_text("<b><u>❗️❗️❗️IMPORTANT❗️️❗️❗️</u></b>\n\nThis Movie Files/Videos will be deleted in <b><u>10 mins</u> 🫥 <i></b>(Due to Copyright Issues)</i>.\n\n<b><i>Please forward this ALL Files/Videos to your Saved Messages and Start Download there</i></b>")
-                await asyncio.sleep(600)
-                await m.delete()
-                await k.edit("<b>Your File/Video is successfully deleted!!!</b>")
-                return
             except FloodWait as e:
                 await asyncio.sleep(e.x)
                 logger.warning(f"Floodwait of {e.x} sec.")
@@ -230,11 +225,6 @@ async def start(client, message):
                 file_id=file_id,
                 protect_content=True if pre == 'filep' else False,
                 )
-            k = await message.reply_text("<b><u>❗️❗️❗️IMPORTANT❗️️❗️❗️</u></b>\n\nThis Movie Files/Videos will be deleted in <b><u>10 mins</u> 🫥 <i></b>(Due to Copyright Issues)</i>.\n\n<b><i>Please forward this ALL Files/Videos to your Saved Messages and Start Download there</i></b>")
-            await asyncio.sleep(600)
-            await msg.delete()
-            await k.edit("<b>Your File/Video is successfully deleted!!!</b>")
-            return
             filetype = msg.media
             file = getattr(msg, filetype.value)
             title = file.file_name
@@ -262,17 +252,13 @@ async def start(client, message):
             f_caption=f_caption
     if f_caption is None:
         f_caption = f"{files.file_name}"
-    m=await client.send_cached_media(
+    await client.send_cached_media(
         chat_id=message.from_user.id,
         file_id=file_id,
         caption=f_caption,
         protect_content=True if pre == 'filep' else False,
         )
-    k = await message.reply_text("<b><u>❗️❗️❗️IMPORTANT❗️️❗️❗️</u></b>\n\nThis Movie Files/Videos will be deleted in <b><u>10 mins</u> 🫥 <i></b>(Due to Copyright Issues)</i>.\n\n<b><i>Please forward this ALL Files/Videos to your Saved Messages and Start Download there</i></b>")
-    await asyncio.sleep(600)
-    await m.delete()
-    await k.edit("<b>Your File/Video is successfully deleted!!!</b>")
-    return           
+                    
 
 @Client.on_message(filters.command('channel') & filters.user(ADMINS))
 async def channel_info(bot, message):
