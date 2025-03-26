@@ -30,7 +30,7 @@ PICS = (environ.get('PICS', 'https://envs.sh/YxC.jpg https://envs.sh/YxR.jpg htt
 
 # Admins, Channels & Users
 ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '1892771262').split()]
-CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '-1002097504396').split()]
+CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '-1002490892111 -1002097504396').split()]
 auth_users = [int(user) if id_pattern.search(user) else user for user in environ.get('AUTH_USERS', '').split()]
 AUTH_USERS = (auth_users + ADMINS) if auth_users else []
 auth_channel = environ.get('AUTH_CHANNEL')
@@ -44,7 +44,7 @@ DATABASE_NAME = environ.get('DATABASE_NAME', "Cluster0")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'mn_files')
 
 # Others
-LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002167427268'))
+LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002345447637'))
 SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'mnbots_support')
 P_TTI_SHOW_OFF = is_enabled((environ.get('P_TTI_SHOW_OFF', 'False')), False)
 IMDB = is_enabled((environ.get('IMDB', 'False')), False)
