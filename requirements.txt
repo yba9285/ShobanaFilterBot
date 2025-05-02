@@ -46,7 +46,6 @@ telegraph
 tgcrypto
 pyrofork==2.3.4
 ujson
-umongo>=3.1.0
 wget
 werkzeug>=2.0
 wheel
