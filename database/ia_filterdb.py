@@ -158,33 +158,76 @@ def unpack_new_file_id(new_file_id):
 import re
 from collections import defaultdict
 
-async def get_movie_list(limit=20):
-    cursor = Media.find().sort("$natural", -1).limit(100)
-    files = await cursor.to_list(length=100)
-    results = []
+QUALITY_REGEX = re.compile(
+    r"(2160p|1080p|720p|480p|360p|4k|bluray|brrip|hdrip|webrip|web-dl|dvdrip|hdtv|cam|ts|tc|dvdscr|hdr|hevc|x264|x265|h\.264|h\.265)",
+    re.I
+)
 
-    for file in files:
-        name = getattr(file, "file_name", "")
-        if not re.search(r"(s\d{1,2}|season\s*\d+).*?(e\d{1,2}|episode\s*\d+)", name, re.I):
-            results.append(name)
-        if len(results) >= limit:
-            break
-    return results
+def extract_quality(name):
+    matches = QUALITY_REGEX.findall(name)
+    if matches:
+        return " ".join(sorted(set(m.title() for m in matches)))
+    return "Unknown"
+
+def clean_title(name):
+    name = re.sub(r"\[.*?\]|\(.*?\)|\b(2160p|1080p|720p|480p|360p|bluray|brrip|hdrip|webrip|web-dl|dvdrip|hdtv|cam|ts|tc|dvdscr|hdr|hevc|x264|x265|h\.264|h\.265)\b|\.mkv|\.mp4|\.avi", "", name, flags=re.I)
+    return name.strip().title()
+
+def is_series_file(name: str) -> bool:
+    # Match anything with season OR episode patterns
+    return bool(re.search(r"(?:S\d{1,2}|Season\s*\d+|E\d{1,2}|Episode\s*\d+)", name, re.I))
 
 async def get_series_grouped(limit=30):
-    cursor = Media.find().sort("$natural", -1).limit(150)
-    files = await cursor.to_list(length=150)
+    cursor = Media.find().sort("$natural", -1).limit(200)
+    files = await cursor.to_list(length=200)
     grouped = defaultdict(list)
 
     for file in files:
         name = getattr(file, "file_name", "")
-        match = re.search(r"(.*?)(?:S\d{1,2}|Season\s*\d+).*?(?:E|Ep|Episode)?(\d{1,2})", name, re.I)
+        if not is_series_file(name):
+            continue
+
+        title = clean_title(name)
+
+        # Try to extract season and episode
+        match = re.search(
+            r"(?:S(\d{1,2})|Season\s*(\d{1,2})).*?(?:E(\d{1,2})|Episode\s*(\d{1,2}))?",
+            name,
+            re.I
+        )
+
         if match:
-            title = match.group(1).strip().title()
-            episode = int(match.group(2))
-            grouped[title].append(episode)
+            season = match.group(1) or match.group(2) or 0
+            episode = match.group(3) or match.group(4) or 0
+        else:
+            # Fallback if only E or S is present
+            season_match = re.search(r"S(\d{1,2})|Season\s*(\d{1,2})", name, re.I)
+            episode_match = re.search(r"E(\d{1,2})|Episode\s*(\d{1,2})", name, re.I)
+            season = season_match.group(1) or season_match.group(2) if season_match else 0
+            episode = episode_match.group(1) or episode_match.group(2) if episode_match else 0
+
+        grouped[title].append((int(season), int(episode)))
 
     return {
         title: sorted(set(eps))[:10]
         for title, eps in grouped.items() if eps
+    }
+
+async def get_movies_grouped(limit=30):
+    cursor = Media.find().sort("$natural", -1).limit(200)
+    files = await cursor.to_list(length=200)
+    grouped = defaultdict(list)
+
+    for file in files:
+        name = getattr(file, "file_name", "")
+        if is_series_file(name):
+            continue  # skip any file with S or E in it
+
+        title = clean_title(name)
+        quality = extract_quality(name)
+        grouped[title].append(quality)
+
+    return {
+        title: sorted(set(qualities))[:5]
+        for title, qualities in grouped.items() if qualities
     }
