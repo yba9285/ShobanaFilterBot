@@ -21,7 +21,8 @@ BOT_TOKEN = environ.get('BOT_TOKEN', '')
 
 # Keep-Alive URL
 KEEP_ALIVE_URL = environ.get("KEEP_ALIVE_URL", "https://protective-carmine-musammil2007-a8248229.koyeb.app/")  # <-- Add this line
-
+#hyper link
+HYPER_MODE = bool(environ.get('HYPER_MODE', True))
 # Bot settings
 BOT_START_TIME = time()
 CACHE_TIME = int(environ.get('CACHE_TIME', 300))
