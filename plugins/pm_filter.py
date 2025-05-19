@@ -1,4 +1,5 @@
 # Kanged From @TroJanZheX
+#hyper link mode by mn-bots
 import asyncio
 import re
 import ast
@@ -15,6 +16,7 @@ from pyrogram import Client, filters, enums
 from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid
 from utils import get_size, is_subscribed, get_poster, search_gagala, temp, get_settings, save_group_settings
 from database.users_chats_db import db
+from info import HYPER_MODE
 from database.ia_filterdb import Media, get_file_details, get_search_results
 from database.filters_mdb import (
     del_all,
@@ -656,29 +658,48 @@ async def auto_filter(client, msg, spoll=False):
         message = msg.message.reply_to_message  # msg will be callback query
         search, files, offset, total_results = spoll
     pre = 'filep' if settings['file_secure'] else 'file'
-    if settings["button"]:
-        btn = [
-            [
-                InlineKeyboardButton(
-                    text=f"📂[{get_size(file.file_size)}]--{file.file_name}", callback_data=f'{pre}#{file.file_id}'
-                ),
-            ]
-            for file in files
-        ]
+    if HYPER_MODE:
+        cap_lines = []
+        for file in files:
+            file_link = f"https://t.me/{temp.U_NAME}?start={pre}_{file.file_id}"
+            cap_lines.append(f"📁 {get_size(file.file_size)} - [{file.file_name}]({file_link})")
+        cap_text = "\n".join(cap_lines)
+
+        btn = []
+        if offset != "":
+            key = f"{message.chat.id}-{message.id}"
+            BUTTONS[key] = search
+            req = message.from_user.id if message.from_user else 0
+            btn.append([
+                InlineKeyboardButton(text=f"📃 1/{math.ceil(int(total_results) / 10)}", callback_data="pages"),
+                InlineKeyboardButton(text="NEXT ▶️", callback_data=f"next_{req}_{key}_{offset}")
+            ])
+        else:
+            btn.append([InlineKeyboardButton(text="📃 1/1", callback_data="pages")])
     else:
-        btn = [
-            [
-                InlineKeyboardButton(
-                    text=f"{file.file_name}",
-                    callback_data=f'{pre}#{file.file_id}',
-                ),
-                InlineKeyboardButton(
-                    text=f"{get_size(file.file_size)}",
-                    callback_data=f'{pre}#{file.file_id}',
-                ),
+        if settings["button"]:
+            btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"📂[{get_size(file.file_size)}]--{file.file_name}", callback_data=f'{pre}#{file.file_id}'
+                    ),
+                ]
+                for file in files
             ]
-            for file in files
-        ]
+        else:
+            btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"{file.file_name}",
+                        callback_data=f'{pre}#{file.file_id}',
+                    ),
+                    InlineKeyboardButton(
+                        text=f"{get_size(file.file_size)}",
+                        callback_data=f'{pre}#{file.file_id}',
+                    ),
+                ]
+                for file in files
+            ]
 
     if offset != "":
         key = f"{message.chat.id}-{message.id}"
