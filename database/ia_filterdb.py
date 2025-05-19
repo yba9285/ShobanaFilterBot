@@ -158,28 +158,6 @@ def unpack_new_file_id(new_file_id):
 import re
 from collections import defaultdict
 
-def clean_movie_title(name):
-    # Remove brackets and extensions
-    name = re.sub(r"\[.*?\]|\(.*?\)", "", name)
-    name = re.sub(r"\.mkv|\.mp4|\.avi", "", name, flags=re.I)
-
-    # Match up to the year (1900–2099)
-    match = re.search(r"^(.*?\b(19|20)\d{2})\b", name)
-    if match:
-        title = match.group(1)
-    else:
-        title = name
-
-    title = re.sub(r"\s+", " ", title)  # normalize whitespace
-    return title.strip().title()
-
-def extract_quality(name):
-    match = re.search(r"\b(2160p|1080p|720p|480p|360p)\b", name, re.I)
-    return match.group(1) if match else "Unknown"
-
-def is_series_file(name):
-    return bool(re.search(r"\b(s\d{1,2}e\d{1,2}|e\d{1,2}|season\s*\d+|episode\s*\d+)\b", name, re.I))
-
 async def get_movie_list(limit=20):
     cursor = Media.find().sort("$natural", -1).limit(100)
     files = await cursor.to_list(length=100)
@@ -187,94 +165,26 @@ async def get_movie_list(limit=20):
 
     for file in files:
         name = getattr(file, "file_name", "")
-        if not is_series_file(name):
+        if not re.search(r"(s\d{1,2}|season\s*\d+).*?(e\d{1,2}|episode\s*\d+)", name, re.I):
             results.append(name)
         if len(results) >= limit:
             break
     return results
 
-async def get_movies_grouped(limit=30):
-    cursor = Media.find().sort("$natural", -1).limit(200)
-    files = await cursor.to_list(length=200)
-    grouped = defaultdict(set)
+async def get_series_grouped(limit=30):
+    cursor = Media.find().sort("$natural", -1).limit(150)
+    files = await cursor.to_list(length=150)
+    grouped = defaultdict(list)
 
     for file in files:
         name = getattr(file, "file_name", "")
-        if is_series_file(name):
-            continue  # Skip series
-
-        title = clean_movie_title(name)
-        quality = extract_quality(name)
-        grouped[title].add(quality)
+        match = re.search(r"(.*?)(?:S\d{1,2}|Season\s*\d+).*?(?:E|Ep|Episode)?(\d{1,2})", name, re.I)
+        if match:
+            title = match.group(1).strip().title()
+            episode = int(match.group(2))
+            grouped[title].append(episode)
 
     return {
-        title: sorted(list(qualities), reverse=True)
-        for title, qualities in grouped.items() if qualities
+        title: sorted(set(eps))[:10]
+        for title, eps in grouped.items() if eps
     }
-
-def clean_series_title(name):
-    name = re.sub(r"\[.*?\]|\(.*?\)", "", name)
-    name = re.sub(r"\.mkv|\.mp4|\.avi", "", name, flags=re.I)
-    name = name.lower()
-
-    # Remove tags at beginning like s01e02, e12, ep23, s01
-    name = re.sub(r"^(s\d{1,2}e\d{1,2}|e\d{1,2}|ep\d{1,2}|s\d{1,2})\s*", "", name, flags=re.I)
-
-    # Remove extra tags (lang, quality)
-    name = re.sub(r"\b(malayalam|tamil|hindi|telugu|english|720p|1080p|480p|x264|x265|web[-\. ]?dl|hdrip|brrip|bluray|dvdrip)\b", "", name, flags=re.I)
-    name = re.sub(r"\s+", " ", name)
-    return name.strip().title()
-
-def extract_season_episode(name):
-    name = name.lower()
-
-    match = re.search(r"s(\d{1,2})e(\d{1,2})", name)
-    if match:
-        return int(match.group(1)), int(match.group(2))
-
-    match = re.search(r"(?:ep|e)(\d{1,2})", name)
-    if match:
-        return None, int(match.group(1))
-
-    match = re.search(r"s(\d{1,2})", name)
-    if match:
-        return int(match.group(1)), None
-
-    return None, None
-
-async def get_series_grouped(limit=30):
-    cursor = Media.find().sort("$natural", -1).limit(200)
-    files = await cursor.to_list(length=200)
-
-    grouped = defaultdict(lambda: {"episodes": set(), "seasons": defaultdict(set)})
-
-    for file in files:
-        name = getattr(file, "file_name", "")
-        season, episode = extract_season_episode(name)
-        title = clean_series_title(name)
-
-        if season and episode:
-            grouped[title]["seasons"][season].add(episode)
-        elif episode:
-            grouped[title]["episodes"].add(episode)
-        elif season:
-            grouped[title]["seasons"][season]  # Just mark season
-
-    result = {}
-
-    for title, data in grouped.items():
-        parts = []
-        if data["episodes"]:
-            ep_list = ", ".join(str(e) for e in sorted(data["episodes"]))
-            parts.append(f"Episodes {ep_list}")
-
-        for season, eps in sorted(data["seasons"].items()):
-            if eps:
-                ep_list = ", ".join(str(e) for e in sorted(eps))
-                parts.append(f"Season {season} Episodes {ep_list}")
-            else:
-                parts.append(f"Season {season}")
-
-        result[title] = parts[:5]  # Limit to 5 entries per title
-
-    return result
