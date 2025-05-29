@@ -1,6 +1,9 @@
+#  @MrMNTG @MusammilN
+#please give credits https://github.com/MN-BOTS/ShobanaFilterBot
+
 import logging
 from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid
-from info import AUTH_CHANNEL, LONG_IMDB_DESCRIPTION, MAX_LIST_ELM
+from info import LONG_IMDB_DESCRIPTION, MAX_LIST_ELM
 from imdb import IMDb
 import asyncio
 from pyrogram.types import Message, InlineKeyboardButton
@@ -14,6 +17,8 @@ from database.users_chats_db import db
 from bs4 import BeautifulSoup
 import requests
 
+#  @MrMNTG @MusammilN
+#please give credits https://github.com/MN-BOTS/ShobanaFilterBot
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -40,19 +45,61 @@ class temp(object):
     B_NAME = None
     SETTINGS = {}
 
-async def is_subscribed(bot, query):
-    try:
-        user = await bot.get_chat_member(AUTH_CHANNEL, query.from_user.id)
-    except UserNotParticipant:
-        pass
-    except Exception as e:
-        logger.exception(e)
-    else:
-        if user.status != 'kicked':
-            return True
+#  @MrMNTG @MusammilN
+#please give credits https://github.com/MN-BOTS/ShobanaFilterBot
+from pyrogram.enums import ChatMemberStatus
+from database.users_chats_db import db
+
+#  @MrMNTG @MusammilN
+#please give credits https://github.com/MN-BOTS/ShobanaFilterBot
+JOIN_REQUEST_USERS = {} 
+#  @MrMNTG @MusammilN
+#please give credits https://github.com/MN-BOTS/ShobanaFilterBot
+
+async def is_subscribed(user_id: int, client) -> bool:
+    auth_channels = await db.get_auth_channels()
+    if not auth_channels:
+        return True  # No channels to check
+
+    # First check: Is user already a member/admin/owner in any auth channel?
+    for channel in auth_channels:
+        try:
+            member = await client.get_chat_member(channel, user_id)
+            if member.status in [
+                ChatMemberStatus.MEMBER,
+                ChatMemberStatus.ADMINISTRATOR,
+                ChatMemberStatus.OWNER,
+            ]:
+                return True
+        except Exception:
+            continue  # Skip if channel is inaccessible
+
+    # Second check: Has user sent join requests to all auth channels?
+    requested_channels = JOIN_REQUEST_USERS.get(user_id, set())
+    if set(auth_channels).issubset(requested_channels):
+        return True
 
     return False
 
+#  @MrMNTG @MusammilN
+#please give credits https://github.com/MN-BOTS/ShobanaFilterBot
+async def create_invite_links(client) -> dict:
+    links = {}
+    auth_channels = await db.get_auth_channels()
+    for channel in auth_channels:
+        try:
+            invite = await client.create_chat_invite_link(
+                channel,
+                creates_join_request=True,
+                name="BotAuthAccess"
+            )
+            links[channel] = invite.invite_link
+        except Exception:
+            continue
+    return links
+
+#  @MrMNTG @MusammilN
+#please give credits https://github.com/MN-BOTS/ShobanaFilterBot
 async def get_poster(query, bulk=False, id=False, file=None):
     if not id:
         # https://t.me/GetTGLink/4183
