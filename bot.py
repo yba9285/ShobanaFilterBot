@@ -1,3 +1,5 @@
+#  @MrMNTG @MusammilN
+#please give credits https://github.com/MN-BOTS/ShobanaFilterBot
 import logging
 import logging.config
 import os
@@ -12,14 +14,14 @@ logging.config.fileConfig('logging.conf')
 logging.getLogger().setLevel(logging.INFO)
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
 logging.getLogger("imdbpy").setLevel(logging.ERROR)
-logging.getLogger("asyncio").setLevel(logging.CRITICAL - 1)  # Prevent stopping the bot after 1 week
+logging.getLogger("asyncio").setLevel(logging.CRITICAL - 1)
 
 import tgcrypto
 from pyrogram import Client, __version__
 from pyrogram.raw.all import layer
 from database.ia_filterdb import Media
 from database.users_chats_db import db
-from info import SESSION, API_ID, API_HASH, BOT_TOKEN, LOG_STR, LOG_CHANNEL, KEEP_ALIVE_URL
+from info import SESSION, API_ID, API_HASH, BOT_TOKEN, LOG_STR, LOG_CHANNEL, KEEP_ALIVE_URL, DEFAULT_AUTH_CHANNELS
 from utils import temp
 from typing import Union, Optional, AsyncGenerator
 from pyrogram import types
@@ -36,16 +38,24 @@ from plugins.webcode import bot_run
 
 PORT_CODE = environ.get("PORT", "8080")
 
+
+# ✅ Add this block
+async def preload_auth_channels():
+    if not await db.get_auth_channels():
+        await db.set_auth_channels(DEFAULT_AUTH_CHANNELS)
+        logging.info("Set default AUTH_CHANNELs in DB.")
+
 async def keep_alive():
     """Send a request every 111 seconds to keep the bot alive (if required)."""
     async with aiohttp.ClientSession() as session:
         while True:
             try:
-                await session.get(KEEP_ALIVE_URL)  # Uses the imported URL from info.py
+                await session.get(KEEP_ALIVE_URL)
                 logging.info("Sent keep-alive request.")
             except Exception as e:
                 logging.error(f"Keep-alive request failed: {e}")
             await asyncio.sleep(111)
+
 
 class Bot(Client):
 
@@ -61,13 +71,12 @@ class Bot(Client):
         )
 
     async def kulasthree(self):
-        """hello"""
         while True:
-            await asyncio.sleep(24 * 60 * 60)  # Wait for 24 hours
+            await asyncio.sleep(24 * 60 * 60)
             logging.info("🔄 Bot is restarting")
             await self.send_message(chat_id=LOG_CHANNEL, text="🔄 Bot is restarting ...")
-            os.execl(sys.executable, sys.executable, *sys.argv)  
-            
+            os.execl(sys.executable, sys.executable, *sys.argv)
+
     async def start(self, **kwargs):
         b_users, b_chats = await db.get_banned()
         temp.BANNED_USERS = b_users
@@ -79,9 +88,14 @@ class Bot(Client):
         temp.U_NAME = me.username
         temp.B_NAME = me.first_name
         self.username = '@' + me.username
+
+        # ✅ preload auth channels from info.py if DB is empty
+        await preload_auth_channels()
+
         logging.info(f"{me.first_name} running on Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
         logging.info(LOG_STR)
-        await self.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT)  # Log restart message
+        await self.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT)
+
         print("mntg4u</>")
 
         tz = pytz.timezone('Asia/Kolkata')
@@ -90,10 +104,7 @@ class Bot(Client):
         time = now.strftime("%H:%M:%S %p")
         await self.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_GC_TXT.format(today, time))
 
-        # Start restart task
         asyncio.create_task(self.kulasthree())
-
-        # Start keep-alive task
         asyncio.create_task(keep_alive())
 
         client = webserver.AppRunner(await bot_run())
@@ -111,7 +122,6 @@ class Bot(Client):
         limit: int,
         offset: int = 0,
     ) -> Optional[AsyncGenerator["types.Message", None]]:
-        """Iterate through chat messages sequentially."""
         current = offset
         while True:
             new_diff = min(200, limit - current)
