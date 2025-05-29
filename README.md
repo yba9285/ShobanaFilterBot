@@ -34,6 +34,34 @@
 </div>
 
 
+## ✨ Features
+
+- ✅ Auto Filter  
+- ✅ Manual Filter  
+- ✅ IMDB Search and Info  
+- ✅ Admin Commands  
+- ✅ Broadcast Messages  
+- ✅ File Indexing  
+- ✅ Inline Search  
+- ✅ Random Pics Generator  
+- ✅ User and Chat Stats  
+- ✅ Ban, Unban, Enable, Disable Commands  
+- ✅ File Storage  
+- ✅ Auto-Approval for Requests  
+- ✅ Shortener Link Support (`/short`)  
+- ✅ Feedback System  
+- ✅ Font Styling (`/font`)  
+- ✅ User Promotion/Demotion  
+- ✅ Pin/Unpin Messages  
+- ✅ Image-to-Link Conversion
+- ✅ ✅ Auto Delete (automatically delete user messages, no need for an external auto-delete bot)
+- ✅ Auto Restart
+- ✅ Added Keep Alive Function (No need uptimerobot & koyeb sleep problem solved)
+- ✅ /movies and /series for getting recently added content
+- ✅ Hyperlink Mode (if hyperlink mode was true, then the results are in hyperlink instead of callbacks)
+- ✅ Multiple Request Force Sub support with update force sub channels by using /fsub command like /fsub {channel id 1} {channel id 2} {channel id 3}
+- ✅ Delete files related to specific query (/deletefiles predvd then delete all files which contain predvd in their name)
+  
 ## 🔧 Variables
 
 ### Required
@@ -82,4 +110,4 @@ python3 bot.py</pre>
 🙏 Credits
 <ul> <li><a href="https://github.com/pyrogram/pyrogram" target="_blank">Dan</a> for the Pyrogram Library</li> <li><a href="https://github.com/Mahesh0253/Media-Search-bot" target="_blank">Mahesh</a> for the Media Search Bot</li> <li><a href="https://github.com/EvamariaTG/EvaMaria" target="_blank">EvamariaTG</a> for the EvaMaria Bot</li> <li><a href="https://github.com/trojanzhex/Unlimited-Filter-Bot" target="_blank">Trojanz</a> for Unlimited Filter Bot</li> <li>Goutham for ping feature</li> <li>MN-TG for editing and modifying this repository(Currently It's Me)</li> <li> If your intrested to Collab with us Just fork this repo and create pull request ------<a href="https://github.com/MN-BOTS/ShobanaFilterBot/fork" target="_blank"> Click Here To Fork Repo  </a></li> </ul> <hr>
 📜 Disclaimer
-<p> <a href="https://www.gnu.org/licenses/agpl-3.0.en.html" target="_blank"> <img src="https://www.gnu.org/graphics/agplv3-155x51.png" alt="GNU AGPLv3"> </a> </p> <p> This project is licensed under the <a href="https://github.com/mn-bots/ShobanaFilterBot/blob/main/LICENSE" target="_blank">GNU AGPL 3.0</a>. <strong>Selling this code for monetary gain is strictly prohibited.</strong> </p> <hr> ```
+<p> <a href="https://www.gnu.org/licenses/agpl-3.0.en.html" target="_blank"> <img src="https://www.gnu.org/graphics/agplv3-155x51.png" alt="GNU AGPLv3"> </a> </p> <p> This project is licensed under the <a href="https://github.com/mn-bots/ShobanaFilterBot/blob/main/LICENSE" target="_blank">GNU AGPL 3.0</a>. <strong>Selling this code for monetary gain is strictly prohibited.</strong> </p> <hr> 
