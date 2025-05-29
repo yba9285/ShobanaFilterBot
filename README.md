@@ -54,14 +54,14 @@
 - ✅ User Promotion/Demotion  
 - ✅ Pin/Unpin Messages  
 - ✅ Image-to-Link Conversion
-- ✅ ✅ Auto Delete (automatically delete user messages, no need for an external auto-delete bot)
+- ✅ Auto Delete: Automatically removes user messages after processing, so you don't need a separate auto-delete bot
 - ✅ Auto Restart
-- ✅ Added Keep Alive Function (No need uptimerobot & koyeb sleep problem solved)
-- ✅ /movies and /series for getting recently added content
-- ✅ Hyperlink Mode (if hyperlink mode was true, then the results are in hyperlink instead of callbacks)
-- ✅ Multiple Request Force Sub support with update force sub channels by using /fsub command like /fsub {channel id 1} {channel id 2} {channel id 3}
-- ✅ Delete files related to specific query (/deletefiles predvd then delete all files which contain predvd in their name)
-  
+- ✅ Keep Alive Function: Prevents the bot from sleeping or shutting down unexpectedly on platforms like Koyeb, eliminating the need for external uptime services like UptimeRobot.
+- ✅ /movies and /series Commands: Instantly fetch and display the most recently added movies or series with these commands.
+- ✅ Hyperlink Mode: When enabled, search results are sent as clickable hyperlinks instead of using callback buttons for easier access.
+- ✅ Multiple Force Subscription Channels: You can require users to join multiple channels before they use the bot. Easily update the required channels with the /fsub command, e.g., /fsub channel1 channel2 channel3.
+-✅ Delete Files by Query: Use the /deletefiles <keyword> command to delete all files containing a specific word in their name. For example, /deletefiles predvd removes all files with 'predvd' in their filename.
+
 ## 🔧 Variables
 
 ### Required
