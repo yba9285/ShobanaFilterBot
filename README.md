@@ -59,7 +59,7 @@
 - ✅ Keep Alive Function: Prevents the bot from sleeping or shutting down unexpectedly on platforms like Koyeb, eliminating the need for external uptime services like UptimeRobot.
 - ✅ /movies and /series Commands: Instantly fetch and display the most recently added movies or series with these commands.
 - ✅ Hyperlink Mode: When enabled, search results are sent as clickable hyperlinks instead of using callback buttons for easier access.
-- ✅ Multiple Force Subscription Channels: You can require users to join multiple channels before they use the bot. Easily update the required channels with the /fsub command, e.g., /fsub channel1 channel2 channel3.
+- ✅ Multiple Request FSub support: You can add multiple channels. added request fsub support. Easily update the required channels with the /fsub command, e.g., /fsub (channel1 id) (channel2 id) (channel3 id).
 - ✅ Delete Files by Query: Use the /deletefiles <keyword> command to delete all files containing a specific word in their name. For example, /deletefiles predvd removes all files with 'predvd' in their filename.
 
 ## 🔧 Variables
