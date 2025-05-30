@@ -34,7 +34,6 @@ SPELL_CHECK = {}
 
 @Client.on_message(filters.group | filters.private & filters.text & filters.incoming) 
 async def give_filter(client, message):
-    await asyncio.sleep(5)
     try:
         await message.delete()
     except Exception as e:
