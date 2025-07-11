@@ -23,6 +23,8 @@ BOT_TOKEN = environ.get('BOT_TOKEN', '')
 KEEP_ALIVE_URL = environ.get("KEEP_ALIVE_URL", "https://burning-brittney-leech2-3bc21fb5.koyeb.app/")  # <-- Add this line
 #hyper link
 HYPER_MODE = bool(environ.get('HYPER_MODE', False))
+#request fsub
+REQUEST_FSUB_MODE = bool(environ.get('REQUEST_FSUB_MODE', False))
 # Bot settings
 BOT_START_TIME = time()
 CACHE_TIME = int(environ.get('CACHE_TIME', 300))
