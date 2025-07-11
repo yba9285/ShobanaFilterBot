@@ -8,7 +8,7 @@ from pyrogram.errors import ChatAdminRequired, FloodWait
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from database.ia_filterdb import Media, get_file_details, unpack_new_file_id
 from database.users_chats_db import db
-from info import CHANNELS, ADMINS, LOG_CHANNEL, PICS, BATCH_FILE_CAPTION, CUSTOM_FILE_CAPTION, PROTECT_CONTENT
+from info import CHANNELS, ADMINS, LOG_CHANNEL, PICS, BATCH_FILE_CAPTION, CUSTOM_FILE_CAPTION, PROTECT_CONTENT, FILE_CHANNELS, FILE_CHANNEL_SENDING_MODE, FILE_AUTO_DELETE_SECONDS
 from utils import get_settings, get_size, is_subscribed, save_group_settings, temp, create_invite_links
 from database.connections_mdb import active_connection
 import re
@@ -23,11 +23,7 @@ BATCH_FILES = {}
 from datetime import datetime, timedelta
 import random
 
-# Add these constants to your info.py
-FILE_CHANNELS = [-1002831639976, -1002607076908, -1002869981026]  # Your channel IDs
-FILE_CHANNEL_SENDING_MODE = True
 AUTO_DELETE_SECONDS = 15  
-FILE_AUTO_DELETE_SECONDS = 60   # 1 hour for files in channels
 
 # Helper function to create buttons for specific channel
 async def create_file_buttons(client, sent_message):
