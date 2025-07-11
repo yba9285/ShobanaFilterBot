@@ -391,12 +391,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
                 return
             else:
-                await client.send_cached_media(
-                    chat_id=query.from_user.id,
-                    file_id=file_id,
-                    caption=f_caption,
-                    protect_content=True if ident == "filep" else False 
-                )
+                await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
         except UserIsBlocked:
             await query.answer('Unblock the bot mahn !', show_alert=True)
         except PeerIdInvalid:
@@ -778,7 +773,8 @@ async def auto_filter(client, msg, spoll=False):
             **locals()
         )
     else:
-        cap = script.RESULT_TXT.format(search)
+        mention = message.from_user.mention if message.from_user else "User"
+        cap = script.RESULT_TXT.format(mention=mention, query=search)
 
     if imdb and imdb.get('poster'):
         try:
