@@ -15,9 +15,9 @@ def is_enabled(value, default):
 
 #Bot information
 SESSION = environ.get('SESSION', 'Media_search')
-API_ID = int(environ.get('API_ID', '21034333'))
-API_HASH = environ.get('API_HASH', 'c407a29c33d9ddadd47a6d0793e5c00c')
-BOT_TOKEN = environ.get('BOT_TOKEN', '6887050191:AAHAuk3tqTf6mLRzBKxctHqu6PfyqmmkJGU')
+API_ID = int(environ.get('API_ID', ''))
+API_HASH = environ.get('API_HASH', '')
+BOT_TOKEN = environ.get('BOT_TOKEN', '')
 
 # Keep-Alive URL
 KEEP_ALIVE_URL = environ.get("KEEP_ALIVE_URL", "https://burning-brittney-leech2-3bc21fb5.koyeb.app/")  # <-- Add this line
@@ -41,7 +41,7 @@ DEFAULT_AUTH_CHANNELS = [int(x) for x in environ.get("AUTH_CHANNEL", "").split()
 AUTH_GROUPS = [int(ch) for ch in auth_grp.split()] if auth_grp else None
 
 # MongoDB information
-DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://videotv:mnbots@videotv.uteidb8.mongodb.net/?retryWrites=true&w=majority&appName=videotv")
+DATABASE_URI = environ.get('DATABASE_URI', "")
 DATABASE_NAME = environ.get('DATABASE_NAME', "Cluster0")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'mn_files')
 
