@@ -61,6 +61,8 @@
 - ✅ Hyperlink Mode: When enabled, search results are sent as clickable hyperlinks instead of using callback buttons for easier access.
 - ✅ Multiple Request FSub support: You can add multiple channels. Easily update the required channels with the /fsub command, e.g., /fsub (channel1 id) (channel2 id) (channel3 id).
 - ✅ Delete Files by Query: Use the /deletefiles <keyword> command to delete all files containing a specific word in their name. For example, /deletefiles predvd removes all files with 'predvd' in their filename.
+- ✅ Auto file delete.
+- ✅ Channel file sending mode with multiple channel support
 
 ## 🔧 Variables
 
