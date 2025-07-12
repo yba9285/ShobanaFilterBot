@@ -13,21 +13,23 @@ def is_enabled(value, default):
     else:
         return default
 
-# Bot information
+#Bot information
 SESSION = environ.get('SESSION', 'Media_search')
-API_ID = int(environ.get('API_ID', ''))
-API_HASH = environ.get('API_HASH', '')
-BOT_TOKEN = environ.get('BOT_TOKEN', '')
+API_ID = int(environ.get('API_ID', '21034333'))
+API_HASH = environ.get('API_HASH', 'c407a29c33d9ddadd47a6d0793e5c00c')
+BOT_TOKEN = environ.get('BOT_TOKEN', '6887050191:AAHAuk3tqTf6mLRzBKxctHqu6PfyqmmkJGU')
 
 # Keep-Alive URL
-KEEP_ALIVE_URL = environ.get("KEEP_ALIVE_URL", "https://protective-carmine-musammil2007-a8248229.koyeb.app/")  # <-- Add this line
+KEEP_ALIVE_URL = environ.get("KEEP_ALIVE_URL", "https://burning-brittney-leech2-3bc21fb5.koyeb.app/")  # <-- Add this line
 #hyper link
-HYPER_MODE = bool(environ.get('HYPER_MODE', True))
+HYPER_MODE = bool(environ.get('HYPER_MODE', False))
+#request fsub
+REQUEST_FSUB_MODE = bool(environ.get('REQUEST_FSUB_MODE', True))
 # Bot settings
 BOT_START_TIME = time()
 CACHE_TIME = int(environ.get('CACHE_TIME', 300))
 USE_CAPTION_FILTER = bool(environ.get('USE_CAPTION_FILTER', False))
-PICS = (environ.get('PICS', 'https://envs.sh/YxC.jpg https://envs.sh/YxR.jpg https://envs.sh/YxH.jpg https://envs.sh/Yxk.jpg https://envs.sh/Yxv.jpg https://envs.sh/YxU.jpg https://envs.sh/Yx4.jpg')).split()
+PICS = (environ.get('PICS', 'https://graph.org/file/2ed90a79eb533d86f8a0f.jpg https://graph.org/file/a0da24dacf4b7bec376a3.jpg https://graph.org/file/457aa9d0e485925088be6.jpg https://graph.org/file/041f7b57c6950070ba16e.jpg https://graph.org/file/f36511f6042d74d95b5df.jpg https://graph.org/file/a30d30b3bc49bd8745533.jpg https://graph.org/file/ce71502cf614059ce1de5.jpg')).split()
 
 # Admins, Channels & Users
 ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '1892771262').split()]
@@ -39,12 +41,17 @@ DEFAULT_AUTH_CHANNELS = [int(x) for x in environ.get("AUTH_CHANNEL", "").split()
 AUTH_GROUPS = [int(ch) for ch in auth_grp.split()] if auth_grp else None
 
 # MongoDB information
-DATABASE_URI = environ.get('DATABASE_URI', "")
+DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://videotv:mnbots@videotv.uteidb8.mongodb.net/?retryWrites=true&w=majority&appName=videotv")
 DATABASE_NAME = environ.get('DATABASE_NAME', "Cluster0")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'mn_files')
 
+# File Channel Settings
+FILE_CHANNELS = [int(ch) for ch in environ.get('FILE_CHANNELS', '-1002831639976 -1002607076908 -1002869981026').split()]
+FILE_CHANNEL_SENDING_MODE = is_enabled(environ.get('FILE_CHANNEL_SENDING_MODE', 'False'), False)
+FILE_AUTO_DELETE_SECONDS = int(environ.get('FILE_AUTO_DELETE_SECONDS', 3600))  # Default: 1 hour
+
 # Others
-LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002345447637'))
+LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002704640995'))
 SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'mnbots_support')
 P_TTI_SHOW_OFF = is_enabled((environ.get('P_TTI_SHOW_OFF', 'False')), False)
 IMDB = is_enabled((environ.get('IMDB', 'False')), False)

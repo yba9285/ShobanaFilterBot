@@ -49,40 +49,42 @@ class temp(object):
 #please give credits https://github.com/MN-BOTS/ShobanaFilterBot
 from pyrogram.enums import ChatMemberStatus
 from database.users_chats_db import db
+from info import REQUEST_FSUB_MODE  # Import from your info.py
 
-#  @MrMNTG @MusammilN
-#please give credits https://github.com/MN-BOTS/ShobanaFilterBot
-JOIN_REQUEST_USERS = {} 
-#  @MrMNTG @MusammilN
-#please give credits https://github.com/MN-BOTS/ShobanaFilterBot
+JOIN_REQUEST_USERS = {}
 
 async def is_subscribed(user_id: int, client) -> bool:
     auth_channels = await db.get_auth_channels()
     if not auth_channels:
         return True  # No channels to check
 
-    # First check: Is user already a member/admin/owner in any auth channel?
+    # Check if user is joined in channels
+    joined_all = True
     for channel in auth_channels:
         try:
             member = await client.get_chat_member(channel, user_id)
-            if member.status in [
+            if member.status not in [
                 ChatMemberStatus.MEMBER,
                 ChatMemberStatus.ADMINISTRATOR,
                 ChatMemberStatus.OWNER,
             ]:
-                return True
+                joined_all = False
+                break
         except Exception:
-            continue  # Skip if channel is inaccessible
+            joined_all = False
+            break
 
-    # Second check: Has user sent join requests to all auth channels?
-    requested_channels = JOIN_REQUEST_USERS.get(user_id, set())
-    if set(auth_channels).issubset(requested_channels):
+    if joined_all:
         return True
+
+    # If REQUEST_FSUB_MODE is True, check join requests
+    if REQUEST_FSUB_MODE:
+        requested_channels = JOIN_REQUEST_USERS.get(user_id, set())
+        if set(auth_channels).issubset(requested_channels):
+            return True
 
     return False
 
-#  @MrMNTG @MusammilN
-#please give credits https://github.com/MN-BOTS/ShobanaFilterBot
 async def create_invite_links(client) -> dict:
     links = {}
     auth_channels = await db.get_auth_channels()
@@ -90,7 +92,7 @@ async def create_invite_links(client) -> dict:
         try:
             invite = await client.create_chat_invite_link(
                 channel,
-                creates_join_request=True,
+                creates_join_request=REQUEST_FSUB_MODE,  # Only enable join requests if REQUEST_FSUB_MODE is True
                 name="BotAuthAccess"
             )
             links[channel] = invite.invite_link
