@@ -243,7 +243,7 @@ async def start(client, message):
              InlineKeyboardButton(f'ᴜᴘᴅᴀᴛᴇs​', url='https://t.me/MzBotz'),
              InlineKeyboardButton(f'ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ', url='https://t.me/MzMoviiez')
         ],[
-            InlineKeyboardButton('ʀᴇᴘᴏ', url='https://github.com/mn-bots')
+            InlineKeyboardButton('ʀᴇᴘᴏ', url='https://github.com')
          ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_photo(
