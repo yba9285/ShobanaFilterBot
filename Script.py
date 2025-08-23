@@ -7,7 +7,7 @@ class script(object):
 Currently using free server so please Dont kill Me...
 """
     ABOUT_TXT = """<b>
-◎ Cʀᴇᴀᴛᴏʀ: <a href=https://github.com> Mz Botz</a>
+◎ Cʀᴇᴀᴛᴏʀ: <a href=https://t.me/aonemarathi> 💞ʏ☢𝕘Ꭵℝⱥj</a>
 ◎ Lᴀɴɢᴜᴀɢᴇ: Pʏᴛʜᴏɴ 3
 ◎ Dᴀᴛᴀ Bᴀsᴇ: Mᴏɴɢᴏ DB
 ◎ Bᴏᴛ Sᴇʀᴠᴇʀ: KoYeb</b>"""
@@ -16,7 +16,7 @@ Currently using free server so please Dont kill Me...
 - Source - <ahref=https://github.com>Click Here to get source code</a>
 
 <b>DEVS:</b>
--<a href=https://github.com> Mz Botz</a>"""
+-<a href=https://t.me/MzBotz> Mz Botz</a>"""
     MANUELFILTER_TXT = """Help: <b>Filters</b>
 - Filter is the feature were users can set automated replies for a particular keyword and shobana will respond whenever a keyword is found the message
 <b>NOTE:</b>
