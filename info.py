@@ -15,8 +15,8 @@ def is_enabled(value, default):
 
 #Bot information
 SESSION = environ.get('SESSION', 'Media_search')
-API_ID = int(environ.get('API_ID', ''))
-API_HASH = environ.get('API_HASH', '')
+API_ID = int(environ.get('API_ID', '13441344'))
+API_HASH = environ.get('API_HASH', '2f10533d9068507d0c10bf1074527167')
 BOT_TOKEN = environ.get('BOT_TOKEN', '')
 
 # Keep-Alive URL
@@ -41,9 +41,9 @@ DEFAULT_AUTH_CHANNELS = [int(x) for x in environ.get("AUTH_CHANNEL", "").split()
 AUTH_GROUPS = [int(ch) for ch in auth_grp.split()] if auth_grp else None
 
 # MongoDB information
-DATABASE_URI = environ.get('DATABASE_URI', "")
-DATABASE_NAME = environ.get('DATABASE_NAME', "Cluster0")
-COLLECTION_NAME = environ.get('COLLECTION_NAME', 'mn_files')
+DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://yogedrasama:D8oNvWFxBws2et6W@cluster0.5m2w6n8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+DATABASE_NAME = environ.get('DATABASE_NAME', "mzfilestore")
+COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Mz_files')
 
 # File Channel Settings
 FILE_CHANNELS = [int(ch) for ch in environ.get('FILE_CHANNELS', '-1002831639976 -1002607076908 -1002869981026').split()]
@@ -52,7 +52,7 @@ FILE_AUTO_DELETE_SECONDS = int(environ.get('FILE_AUTO_DELETE_SECONDS', 3600))  #
 
 # Others
 LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002704640995'))
-SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'mnbots_support')
+SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'mzbotzsupport')
 P_TTI_SHOW_OFF = is_enabled((environ.get('P_TTI_SHOW_OFF', 'False')), False)
 IMDB = is_enabled((environ.get('IMDB', 'False')), False)
 SINGLE_BUTTON = is_enabled((environ.get('SINGLE_BUTTON', 'True')), True)
