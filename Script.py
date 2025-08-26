@@ -119,16 +119,16 @@ FɪʟᴇSɪᴢᴇ : {file_size}
 
 ╔═  ᴊᴏɪɴ ᴡɪᴛʜ ᴜs   ═╗
  Jᴏɪɴ :- [MAIN CHANNEL](https://t.me/MzMoviiez)
- Jᴏɪɴ :- [Movie Group 1](https://t.me/mzmoviiezsupport)
- Jᴏɪɴ :- [Movie Group 2]()
- Jᴏɪɴ :- [Movie Group 3]()
- Jᴏɪɴ :- [Movie Group 4]()
- Jᴏɪɴ :- [Movie Group 5]()
- Jᴏɪɴ :- [Movie Group 6]()
- Jᴏɪɴ :- [Movie Group 7]()
+ Jᴏɪɴ :- [Movie Group](https://t.me/mzmoviiezsupport)
+ Jᴏɪɴ :- [Botz Update](https://to.me/MzBotz)
+ Jᴏɪɴ :- [Marathi Moviiez](https://to.me/marathimoviiez)
+ Jᴏɪɴ :- [Old Moviez](https://to.me/goldeneramovies)
+ Jᴏɪɴ :- [Botz Support Group](https://MzBotzSupport)
+ Jᴏɪɴ :- [Movie Group]()
+ Jᴏɪɴ :- [Movie Group]()
 ╚═  ᴊᴏɪɴ ᴡɪᴛʜ ᴜs    ═╝
 
-⚠️ <b>This file will be deleted from here within 1 minute as it has copyright ... !!!</b> 
+⚠️ <b>This file will be deleted from here within 5 minute as it has copyright ... !!!</b> 
 """
 
     
