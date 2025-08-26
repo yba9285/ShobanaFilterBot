@@ -120,10 +120,10 @@ FɪʟᴇSɪᴢᴇ : {file_size}
 ╔═  ᴊᴏɪɴ ᴡɪᴛʜ ᴜs   ═╗
  Jᴏɪɴ :- [MAIN CHANNEL](https://t.me/MzMoviiez)
  Jᴏɪɴ :- [Movie Group](https://t.me/mzmoviiezsupport)
- Jᴏɪɴ :- [Botz Update](https://to.me/MzBotz)
- Jᴏɪɴ :- [Marathi Moviiez](https://to.me/marathimoviiez)
- Jᴏɪɴ :- [Old Moviez](https://to.me/goldeneramovies)
- Jᴏɪɴ :- [Botz Support Group](https://MzBotzSupport)
+ Jᴏɪɴ :- [Botz Update](https://t.me/MzBotz)
+ Jᴏɪɴ :- [Marathi Moviiez](https://t.me/marathimoviiez)
+ Jᴏɪɴ :- [Old Moviez](https://t.me/goldeneramovies)
+ Jᴏɪɴ :- [Botz Support Group](https://t.me/MzBotzSupport)
  Jᴏɪɴ :- [Latest Movies](https://t.me/+ydp8iQrXA1hmZDk5)
  Jᴏɪɴ :- [Movie Group](https://t.me/+YqVwUpKg7OtjYTkx)
 ╚═  ᴊᴏɪɴ ᴡɪᴛʜ ᴜs    ═╝
